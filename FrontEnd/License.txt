@@ -1,0 +1,132 @@
+READ THE FOLLOWING TERMS AND CONDITIONS CAREFULLY 
+BEFORE ACCEPTING THIS AGREEMENT.  BY ACCEPTING THIS 
+AGREEMENT YOU AGREE TO BE BOUND BY THE TERMS AND 
+CONDITIONS SET FORTH HEREIN.  IF YOU DO NOT AGREE TO BE 
+BOUND BY THE TERMS AND CONDITIONS, YOU MUST PROMPTLY 
+RETURN THE SOFTWARE TO EBERL'S CLAIM SERVICE, INC. 
+WITHOUT ACCEPTING.
+
+1.  License.  Eberl's Claim Service, Inc. (AECS@) hereby
+grants you the non-exclusive right to:
+
+(a) Use the software contained in this package in the
+United States during the term of this Agreement on any
+single central processing unit.
+
+(b) Use the documentation contained in this package
+in the United States during the term of this
+Agreement in support of your use of the software.
+
+(c) Read the software into and out of memory on any single central 
+processing unit and make one copy of such software for backup 
+purposes, provided that such copy contains all of the restrictive and
+proprietary legends of ECS that appear on the software contained in this 
+package.
+
+2.  Restrictions.  You agree that you may not:
+
+(a) Use the software simultaneously on more that one central processing 
+unit.
+
+(b) Copy the software or documentation, except and to the extent  
+provided in Paragraph1(c).
+
+(c) Sublicense, distribute, disclose or transfer the software or the 
+documentation, in whole or in part, to any third party.
+
+(d) Use the software or documentation outside of the United States.
+
+(e) Use the software, documentation or any portion thereof after any 
+expiration, termination  or cancellation of this Agreement or any license 
+granted hereunder.
+
+3.  LIMITED WARRANTY - LIMITATION OF REMEDIES AND 
+LIABILITY.
+
+(a) THE MEDIA WHICH CONTAINS THE SOFTWARE IS 
+WARRANTED, FOR A PERIOD OF 30 DAYS AFTER YOUR RECEIPT 
+OF THE SOFTWARE, TO BE FREE FROM DEFECTS IN MATERIAL 
+AND WORKMANSHIP. YOUR SOLE AND EXCLUSIVE REMEDY, AND 
+ECS'S SOLE LIABILITY, IS TO REPLACE THE DEFECTIVE MEDIA 
+OR, IF YOU REQUEST, TO REFUND TO YOU THE PURCHASE 
+PRICE FOR THE SOFTWARE AND DOCUMENTATION, PROVIDED 
+THAT YOU NOTIFY ECS IN WRITING OF SUCH DEFECT AND 
+RETURN TO ECS THE DEFECTIVE MEDIA CONTAINING THE 
+SOFTWARE AND THE DOCUMENTATION POSTAGE PREPAID 
+DURING THE ABOVE 30-DAY WARRANTY PERIOD, AT THE 
+FOLLOWING ADDRESS:
+
+Eberl's Claim Service, Inc.
+7276 West Mansfield Ave.
+Lakewood, CO 80235
+
+(b) EXCEPT AND TO THE EXTENT EXPRESSLY PROVIDED IN 
+PARAGRAPH 3(a), THE SOFTWARE AND DOCUMENTATION ARE 
+PROVIDED ON AN  "AS IS" BASIS, WITHOUT ANY WARRANTIES OF 
+ANY KIND, INCLUDING, BUT NOT LIMITED TO, ANY IMPLIED 
+WARRANTIES OF MERCHANTABILITY OF THE COMPUTER 
+PROGRAM, INFORMATIONAL CONTENT, OR FITNESS FOR 
+LICENSEE=S PURPOSE OR SYSTEM INTEGRATION.  THERE IS 
+NOT A WARRANTY AGAINST INTERFERENCE WITH YOUR 
+ENJOYMENT OF THE LICENSED PRODUCT OR AGAINST      
+INFRINGEMENT OF PROPRIETARY RIGHTS OF ANOTHER.  YOU 
+ASSUME THE ENTIRE LIABILITY FOR THE SELECTION AND USE OF 
+THE SOFTWARE AND DOCUMENTATION, AND ECS SHALL HAVE 
+NO LIABILITY FOR ANY ERRORS, MALFUNCTIONS, DEFECTS, OR 
+LOSS OF DATA RESULTING FROM OR RELATED TO THE USE OF 
+SOFTWARE AND/OR DOCUMENTATION.
+
+(c) ECS SHALL NOT BE LIABLE TO YOU FOR ANY INDIRECT, 
+SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS 
+ARISING OUT OF OR RELATED TO THIS AGREEMENT OR YOUR 
+USE OF THE SOFTWARE AND/OR DOCUMENTATION, EVEN IF ECS 
+HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.  IN 
+NO EVENT SHALL ECS' LIABILITY HEREUNDER, IF ANY, EXCEED 
+THE PURCHASE PRICE PAID BY YOU FOR THE SOFTWARE AND 
+DOCUMENTATION.
+
+(d) SOME STATES MAY NOT RECOGNIZE THE FOREGOING 
+LIMITED WARRANTY, LIMITATION OF REMEDIES AND/OR 
+LIMITATION OF LIABILITY AND, IF YOU QUALIFY, YOU MAY HAVE 
+DIFFERENT AND/OR ADDITIONAL RIGHTS AND REMEDIES.  YOU 
+SHOULD CONSULT THE APPLICABLE LAW IN YOU STATE IN THIS 
+REGARD.
+
+4.  Term.  The term of this Agreement and the license granted to you 
+pursuant to Paragraph 1 shall commence upon your opening of this 
+package and shall terminate upon your discontinuing the use of the 
+software.
+
+
+5.  Termination/cancellation.  This Agreement and the license granted 
+herein may be terminated/cancelled by ECS in the event you are in 
+breach of any provision of this Agreement.  You may terminate/cancel 
+any license granted hereunder by providing ECS written notice thereof 
+and returning the software and documentation to ECS.
+
+6.  General.
+
+(a) This Agreement is the complete agreement and understanding of the 
+parties with respect to the software and
+documentation, and supersedes all prior oral, written or other 
+representations and agreements.  This Agreement may only be 
+amended in writing by an authorized officer of ECS, and expressly 
+rejects any modifications to this Agreement and all additional terms and 
+conditions.
+
+(b) Title in and to the software and documentation remainexclusively in 
+ECS, subject to the express, limited, and non-exclusive license granted 
+to you pursuant to Paragraph 1.
+
+(c) The software and documentation may not be exported outside of the 
+United States without prior written permission of ECS and, if such 
+permission is granted by ECS, the exportation of the software and 
+documentation shall be subject to the Export Administration Regulations 
+of the United States Department of Commerce.
+
+(d) This Agreement shall be governed by the laws of the State of 
+Colorado.
+
+BY YOUR OPENING OF THIS SEALED PACKAGE, YOU 
+ACKNOWLEDGE THAT YOU HAVE READ AND UNDERSTAND THE 
+FOREGOING AND THAT YOU AGREE TO BE BOUND THEREBY.

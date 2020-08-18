@@ -1,0 +1,10 @@
+VBGROUP 5.0
+StartupProject=..\..\..\..\..\..\..\Working_EasyClaimv2\EasyClaim\Eberls.vbp
+Project=..\..\ECKeyBoard\ECKeyBoard.vbp
+Project=..\..\ECWeb\ECWeb.vbp
+Project=..\..\ARV\ARViewer.vbp
+Project=..\..\ECcarFarmers\ECcarFarmers.vbp
+Project=..\..\ECcarFarmers\ECguiFarmers\ECguiFarmers.vbp
+Project=..\ECcarSafeco.vbp
+Project=ECguiSafeco.vbp
+Project=..\..\..\..\..\FrontEnd\EasyClaim.vbp

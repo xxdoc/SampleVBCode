@@ -1,0 +1,5 @@
+modStartMain = 0, 0, 0, 0, C
+Globals = 0, 0, 0, 0, C
+modUtil = 0, 0, 0, 0, C
+modMain = 0, 0, 0, 0, C
+frmAITray = 52, 52, 1237, 702, Z, 26, 26, 1211, 676, C

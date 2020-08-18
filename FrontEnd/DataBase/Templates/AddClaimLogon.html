@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>Add Claim Logon</title>
+
+</head>
+
+<body onLoad=	"
+					setTimeout('frmLogin.submit();',10);
+					setTimeout('location= &quot;|ENTER_WEB_SITE|/V2/Production/Administration/Admin/Assignments/Assignments_Admin.cfm?MyAction=OpenADD|0&SelCompany=|ENTER_SelCompany|&selClientCompany=|ENTER_SelClientCompany|&SelAssignmentType=|ENTER_SelAssignmentType|&SelCat=|ENTER_selCat|&SelClientCompanyUser=|ENTER_selClientCompanyUser|&quot;;',4000);
+				">
+
+<table align="center">
+	<tr>
+		<td>
+			<form action="|ENTER_WEB_SITE|/V2/Production/ProductionV2_Index.cfm" 
+				method="post" 
+				Name="frmLogin" 
+				target="MyLogon"
+			>
+				<table align="center" width="100%" cellpadding="2" cellspacing="3" border="0" bgcolor="#E6E6E6" >
+					<tr> 
+						<td colspan="100"> 
+							<table style=" background-color:#003366;" width="75%" border="0" align="center" cellpadding="2" cellspacing="0" >
+								<tr>
+									<td align="center" colspan="100">
+										<font color="white" size="3" face="Arial, Helvetica, sans-serif">
+											<STRONG> 
+													Please Wait!  <br>
+													Loading Screens...
+											</STRONG>
+										</font>
+									</td>
+								</tr>
+								<tr> 
+									<td align="left">
+										<table border="0">
+											<tr>
+												<td colspan="2" align="left" border="0">
+													<Table >
+														<tr>
+															<td align="right">
+																<input type="hidden" name="username" value="|ENTER_USER_NAME|">
+																<input type="hidden" name="password" value="|ENTER_PASSWORD|">
+																<input type="hidden" name="SelSecurityProfile" value="Adjuster">
+															</td>			
+														</tr>
+													</Table>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</td>
+	</tr>
+</table>
+<body>
+</body>
+</html>

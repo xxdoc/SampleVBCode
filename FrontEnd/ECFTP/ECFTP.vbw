@@ -1,0 +1,5 @@
+modStartMain = 0, 0, 0, 0, C
+frmRegForm = 0, 0, 0, 0, C, 156, 156, 877, 560, C
+modMain = 52, 52, 773, 456, 
+frmCommStatus = 44, 44, 595, 480, Z, 22, 22, 573, 458, C
+frmFireWall = 0, 0, 0, 0, C, 130, 130, 851, 534, C

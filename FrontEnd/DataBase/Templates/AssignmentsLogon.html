@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>Assignments Logon</title>
+<script language="javascript">
+var gMySubmit =0;	
+//Validate button clicked only once
+function ClickOnceOnly()
+{
+	if (gMySubmit == 0)
+	{
+		gMySubmit=1;
+		return true;
+	}
+	else
+	{
+		alert('Click once only please!');
+		return false;
+	}	
+}//End ClickOnceOnly
+</script>
+</head>
+<body onLoad=	"
+					setTimeout('frmLogin.submit();',10);
+					
+				">
+<table align="center">
+	<tr>
+		<td>
+			<form action="|ENTER_WEB_SITE|/V2/Production/ProductionV2_Index.cfm" 
+				method="post" 
+				Name="frmLogin" 
+				onSubmit="return ClickOnceOnly();"
+			>
+				<table width="25%" cellpadding="2" cellspacing="3" border="0" bgcolor="#C0C0C0" >
+					<tr> 
+						<td colspan="100"> 
+							<table style=" background-color: #003366;color: #ffffff;darkblue;" width="60%" border="0" align="center" cellpadding="2" cellspacing="0" >
+								<tr>
+									<td align="center" colspan="100">
+										<font color="white" size="3" face="Arial, Helvetica, sans-serif">
+											<STRONG> 
+													Please Wait!  <br>
+													Loading Screens...
+											</STRONG>
+										</font>
+									</td>
+								</tr>
+								<tr> 
+									<td align="left">
+										<table border="0">
+											<tr>
+												<td colspan="2" align="left" border="0">
+													<Table >
+														<!---
+														<tr>
+															<td>
+																<span id="UserPass" style="visibility: visible">
+																	<table>
+																		<tr>
+																			<td>
+																				<FONT color=white Size="2">
+																					<Strong>
+																						<label>User Name:</label><br>
+																						<input 
+																							type="text" 
+																							size="15" 
+																							maxlength="20" 
+																							name="username"
+																							value="|ENTER_USER_NAME|"
+																						>
+																					</Strong>
+																				</FONT>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td>
+																				<FONT color=white Size="2">
+																					<Strong>
+																						<label>Password:</label><br>
+																						<input 
+																							type="password" 
+																							size="15" 
+																							maxlength="20" 
+																							name="password"
+																							value="|ENTER_PASSWORD|"
+																						>
+																					</Strong>
+																				</FONT>
+																			</td>
+																		</tr>
+																	</table>
+																</span>
+															</td>
+														</tr>
+														--->
+														<tr>
+															<td align="right">
+																<!---
+																<input type="submit" value="Login" name="submitLogOn" >
+																--->
+																<input type="hidden" name="username" value="|ENTER_USER_NAME|">
+																<input type="hidden" name="password" value="|ENTER_PASSWORD|">
+																<input type="hidden" name="SelSecurityProfile" value="Adjuster">
+															</td>			
+														</tr>
+													</Table>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</td>
+	</tr>
+</table>
+<body>
+</body>
+</html>

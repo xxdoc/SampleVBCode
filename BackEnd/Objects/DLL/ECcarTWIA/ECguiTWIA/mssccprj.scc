@@ -1,0 +1,5 @@
+SCC = This is a Source Code Control file
+
+[ECguiTWIA.vbp]
+SCC_Aux_Path =C:\VBDEV\Apps\ECS_VSS_V2,
+SCC_Project_Name ="$/EasyClaimV2/BackEnd/Objects/DLL/ECcarTWIA/ECguiTWIA", AONAAAAA

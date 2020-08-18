@@ -1,0 +1,9 @@
+modSafeco = 0, 0, 0, 0, C
+clsLists = 0, 0, 0, 0, C
+clsPaymentRequest = 0, 0, 0, 0, C
+clsULSafeco = 0, 0, 0, 0, C
+modSpool = 0, 0, 0, 0, C
+clsULSafecoRT = 0, 0, 0, 0, C
+modMain = 0, 0, 0, 0, C
+modCommonDlg = 0, 0, 0, 0, C
+frmCancel = 0, 0, 0, 0, C, 0, 0, 0, 0, C

@@ -1,0 +1,4 @@
+clsGUI = 44, 44, 609, 488, C
+frmClaimsList = 198, 198, 711, 642, C, 44, 44, 539, 488, C
+modMain = 22, 22, 567, 466, C
+modCommonDlg = 0, 0, 0, 0, C

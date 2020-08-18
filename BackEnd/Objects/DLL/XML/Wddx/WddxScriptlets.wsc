@@ -1,0 +1,441 @@
+<?xml version="1.0"?>
+
+<package>
+<?component error="true" debug="false"?>
+
+  <comment>
+  	Scriptlet providing conversion functions to/from WDDX Packets/Objects.
+  	Code originally by Nate Weiss (nweiss@icesinc.com), then greatly
+  	enhanced and scriptlet-ized by Joel Mueller (jmueller@creativeis.com).
+    Re-packaged by Nate Weiss for Beta 2 of the WDDX SDK, 4/99
+  </comment>
+
+
+
+
+
+<component>
+
+
+<registration
+	description="WDDX.AdoConverter - WDDX awareness for ADODB.Recordset"
+	progid="WDDX.AdoConverter"
+	version="1.02"
+	classid="{5b05bf60-d729-11d2-9a27-444553540000}"
+>
+</registration>
+
+<public>
+	<method name="serialize" internalName="SerializeADORecordset">
+		<PARAMETER name="AdoRS"/>
+	</method>
+	<method name="deserialize" internalName="DeserializeToAdoRS">
+		<PARAMETER name="WddxPacket"/>
+	</method>
+	<method name="fetchFromWeb" internalName="FetchToAdoRS">
+		<parameter name="httpComponent"/>
+		<parameter name="url"/>
+		<parameter name="postData"/>
+		<parameter name="username"/>
+		<parameter name="password"/>
+		<parameter name="proxyServer"/>
+  </method>
+	<method name="toJavaScript" internalName="AdoRSToJavaScript">
+		<PARAMETER name="AdoRS"/>
+		<PARAMETER name="topLevelVariable"/>
+	</method>
+	<method name="toWddxObject" internalName="AdoToWddxRS">
+		<PARAMETER name="AdoRS"/>
+	</method>
+	<method name="fromWddxObject" internalName="WddxToAdoRS">
+		<PARAMETER name="WddxRS"/>
+	</method>
+  <method name="serializeFromSQL" internalName="SerializeFromSql">
+		<PARAMETER name="QueryCommand"/>
+		<PARAMETER name="ConnectString"/>
+	</method> 
+  <method name="toWddxObjectFromSQL" internalName="SqlToWddxRS">
+		<PARAMETER name="QueryCommand"/>
+		<PARAMETER name="ConnectString"/>
+	</method> 
+</public>
+
+<script language="JScript">
+<![CDATA[
+  function SerializeFromSql(SQL, Connect) {
+    var TempRS = new ActiveXObject("ADODB.Recordset");
+    TempRS.Open(SQL, Connect);
+    
+    return SerializeADORecordset(TempRS);
+  }
+
+  function SqlToWddxRS(SQL, Connect) {
+    var TempRS = new ActiveXObject("ADODB.Recordset");
+    TempRS.Open(SQL, Connect);
+
+    return AdoToWddxRS(TempRS)    
+  }
+
+
+	////////////////////////////////////////////////  
+	// Function to "convert" a ADO-fetched recordset
+	// to a WDDX-style recordset object w/ same data
+	// The SerializeADORecordset function uses this.
+	////////////////////////////////////////////////  
+	function AdoToWddxRS(AspRS) {
+		// Create empty WDDX-style recordset 
+		// Removed Server.CreateObject to allow this to work outside of ASP
+		var WddxRS = new ActiveXObject("WDDX.Recordset.1");  
+
+		// Add the column names from ADO recordset  
+		for (ColNum=0; ColNum< AspRS.Fields.Count; ColNum++) {
+			WddxRS.addColumn(AspRS.Fields(ColNum).Name);
+		};
+
+		// Make sure the ADO recordset is at first row
+		// We'll use RowNum to refer to current row below
+		if (!AspRS.BOF) AspRS.MoveFirst();   
+		var RowNum = 0;
+		
+		// For each row of the ADO recordset, add a row to the 
+		// WDDX recordset, then copy all the data from each column 
+		// in ADO recordset. ColName is column being copied.
+		while (!AspRS.EOF) {
+			WddxRS.addRows(1);
+			RowNum++;
+
+			for (var ColNum=0; ColNum< AspRS.Fields.Count; ColNum++) {
+				ColName = AspRS.Fields(ColNum).Name;
+				WddxRS.setField(RowNum, ColName, AspRS(ColName).Value);
+			};
+
+			AspRS.moveNext();
+		}
+    
+    AspRS.MoveFirst(); 
+
+		// Return the finished Wddx-style recordset to caller    
+		return WddxRS;
+	};
+
+	////////////////////////////////////////////////  
+	// Function to serialize a ADO-style recordset
+	// Returns the serialized WDDX packet
+	////////////////////////////////////////////////  
+	function SerializeADORecordset(AdoRS) {
+		// Convert the ADO Recordset to WDDX-style recordset
+		var MyWddxRS = AdoToWddxRS(AdoRS);
+	
+		// Create instance of Allaire's Serializer, and use it to
+		// serialize new recordset. Return serialized packet to caller.
+		var MySer = new ActiveXObject("WDDX.Serializer.1");
+		return MySer.serialize(MyWddxRS);
+		MySer = null;
+	}
+
+	function WddxToAdoRS(WddxRS) {
+		var NewRS, i, j;
+	
+		// Constant from the MS Data Access SDK
+		var adBSTR = 8;
+		
+		// Create a new ADO recordset
+		// Removed Server.CreateObject to allow this to work outside of ASP
+		var NewRS = new ActiveXObject("ADODB.Recordset");
+		
+		// Get the column names from the WDDX recordset
+		var colNames = new VBArray(WddxRS.getColumnNames());
+		colNames = colNames.toArray();
+		
+		// Add each column name to the ADO recordset
+		for (i=0; i < colNames.length; i++) {
+			NewRS.Fields.Append(colNames[i], adBSTR);
+		}
+
+		// Open the ADO recordset
+		NewRS.Open();
+		
+		// For each row in the WDDX recordset...
+		for (i=1; i <= WddxRS.getRowCount(); i++) {
+		
+			// Establish a new array to hold the values from the WDDX recordset
+			arValues = new Array(WddxRS.getColumnCount()-1);
+
+			// For each column in the WDDX recordset, copy the values from the
+			// current row of the WDDX recordset into the array of values
+			for (j=0; j < colNames.length; j++) {
+				arValues[j] = WddxRS.getField(i, colNames[j]);
+			} 
+
+			// Add the array of values as a fresh row in the ADO recordset
+			NewRS.AddNew(colNames, arValues);
+		}
+
+		// Move the ADO recordset cursor to the first row
+		NewRS.MoveFirst();
+		
+		// Pass the ADO recordset back to calling process
+		return NewRS;
+	}
+	
+	
+	function DeserializeToAdoRS(WddxPacket) {
+		var MyDeser = new ActiveXObject("WDDX.Deserializer.1");
+		var OurWddxRS = MyDeser.deserialize(WddxPacket);
+		MyDeser = null;
+		
+		return WddxToAdoRS(OurWddxRS);
+		OurWddxRS = null;   
+	}
+  
+  
+function FetchToAdoRS(httpComponent, url, postData, username, password, proxyServer) {  
+
+  var Utils = new ActiveXObject("WDDX.PacketUtils");
+  var Packet = Utils.fetchPacketFromWeb(httpComponent, url, postData, username, password, proxyServer);
+  var Obj;
+  
+  if (Packet == '')
+    Obj = null;
+  else
+    Obj = DeserializeToAdoRS(Packet);
+
+  return Obj;
+}  
+  
+  
+function AdoRSToJavaScript(AdoRS, topLevelVariable) {
+  var WddxRS = AdoToWddxRS(AdoRS);
+
+  var Conv = new ActiveXObject("WDDX.JSConverter.1");
+  var JSCode = Conv.convertData(WddxRS, topLevelVariable);
+  Conv = null;
+
+  return JSCode;
+}  
+  
+  
+]]>
+</script>
+
+</component>
+
+
+
+
+
+
+
+<component>
+
+
+<registration
+	description="WDDX.DictConverter - WDDX awareness for Scripting.Dictionary"
+	progid="WDDX.DictConverter"
+	version="1.02"
+	classid="{a9fc9760-d729-11d2-9a27-444553540000}"
+>
+</registration>
+
+<public>
+	<method name="deserialize" internalName="WDDXtoDict">
+		<parameter name="WddxPacket"/>
+	</method>
+	<method name="serialize" internalName="DictToWDDX">
+		<parameter name="ObjDict"/>
+	</method>
+	<method name="fromWddxStruct" internalName="StructToDict">
+		<parameter name="WddxStruct"/>
+	</method>
+	<method name="toWddxStruct" internalName="DictToStruct">
+		<parameter name="ObjDict"/>
+	</method>
+</public>
+
+
+<script language="JScript">
+<![CDATA[
+	function DictToWDDX(objDict) {
+		var objStruct = DictToStruct(objDict);
+		var objSer = new ActiveXObject("WDDX.Serializer.1");
+		return objSer.serialize(objStruct);
+		objSer = null;
+	}
+	
+	function DictToStruct(objDict) {
+		var i;
+		var objStruct = new ActiveXObject("WDDX.Struct.1");
+		objStruct.allowNewProperties = true;
+		var DictKeys = new VBArray(objDict.Keys());
+		for (i = 0; i < objDict.Count; i++) {
+			objStruct.setProp(DictKeys.getItem(i), objDict(DictKeys.getItem(i)));
+		}
+		DictKeys = null;
+		return objStruct;
+	}
+	
+	function WDDXtoDict(WddxPacket) {
+		var objDeser = new ActiveXObject("WDDX.Deserializer.1");
+		var objStruct = objDeser.deserialize(WddxPacket);
+		objDeser = null;
+		return StructToDict(objStruct);
+	}
+
+	function StructToDict(objStruct) {
+		var i;
+		var objDict = new ActiveXObject("Scripting.Dictionary");
+		var StructKeys = new VBArray(objStruct.getPropNames());
+		for (i=0; i <= StructKeys.ubound(); i++) {
+			objDict.Add(StructKeys.getItem(i).toLowerCase(), objStruct.getProp(StructKeys.getItem(i)));
+		}
+		StructKeys = null;
+		return objDict;
+	}
+]]>
+</script>
+
+</component>
+
+
+
+
+
+
+
+<component id="Utils">
+
+<registration
+	description="WDDX.PacketUtils - Misc. WDDX Utilities"
+	progid="WDDX.PacketUtils"
+	version="1.02"
+	classid="{814dce60-e304-11d2-9a27-b5a1e947f949}"
+>
+</registration>
+
+<public>
+	<method name="extractPacket">
+		<parameter name="WddxPacket"/>
+	</method>
+	<method name="fetchPacketFromWeb">
+		<parameter name="httpComponent"/>
+		<parameter name="url"/>
+		<parameter name="postData"/>
+		<parameter name="username"/>
+		<parameter name="password"/>
+		<parameter name="proxyServer"/>
+	</method>
+	<method name="fetchObjectFromWeb">
+		<parameter name="httpComponent"/>
+		<parameter name="url"/>
+		<parameter name="postData"/>
+		<parameter name="username"/>
+		<parameter name="password"/>
+		<parameter name="proxyServer"/>
+	</method>
+</public>
+
+
+<script language="JScript">
+<![CDATA[
+
+
+function extractPacket(WddxPacket) {
+
+  // Delimiters to consider the start and end of packet
+  var tokStart = '<wddxPacket';
+  var tokEnd = '</wddxPacket>';
+
+  // Where does packet begin and end within page?  
+  var posStart = WddxPacket.indexOf(tokStart);
+  var posEnd = WddxPacket.indexOf(tokEnd, posStart);
+
+  // We'll return packet if found; otherwise return null
+  if (posEnd > posStart) 
+    WddxPacket = WddxPacket.substring( posStart, (posEnd + tokEnd.length) );
+  else
+    WddxPacket = '';    
+
+  // Return finished packet to calling code    
+  return WddxPacket;
+}
+
+
+
+function fetchPacketFromWeb(httpComponent, url, postData, username, password, proxyServer) {
+  httpComponent = httpComponent.toLowerCase();
+  var MyPacket = '';
+  
+  
+  // If postData is an object, construct a string of name/value pairs
+  if (typeof postData == 'object') {
+    var newData = '';
+  
+    for (prop in postData) {
+      if (newData.length > 0) newData += '&';
+      newData += prop + '=' + escape(postData[prop]);
+    }
+
+    postData = newData;
+  }
+  
+  
+  
+  if (httpComponent == "asptear") {
+    // Create instance of AspTear Control from www.softwing.com
+    var Request_POST = 1
+    var HttpObj = new ActiveXObject("SOFTWING.AspTear")
+    if (postData == null) postData = ' ';
+    if ( (proxyServer != null) && (proxyServer != '') )
+      HttpObj.Proxy = proxyServer;
+    MyPacket = HttpObj.Retrieve(url, Request_POST, postData, username, password)
+    
+    HttpObj = null;
+  }
+
+  if (httpComponent == "asphttp") {
+    // Create instance of ASPHttp Control from www.serverobjects.com
+    HttpObj = new ActiveXObject("AspHTTP.Conn")
+    HttpObj.Url = url;
+    HttpObj.RequestMethod = "Post";
+    HttpObj.PostData = postData;
+    if ( (username != null) && (password != null) && (username + password != ""))
+      HttpObj.Authorization = username + ":" + password
+    if ( (proxyServer != null) && (proxyServer != '') )
+      HttpObj.Proxy = proxyServer;
+    MyPacket = HttpObj.GetURL();
+    
+    HttpObj = null;
+  }  
+
+  // Clean up packet, if any, and return to Caller
+  return extractPacket(MyPacket);
+}
+
+
+
+function fetchObjectFromWeb(httpComponent, url, postData, username, password, proxyServer) {
+  var Packet = fetchPacketFromWeb(httpComponent, url, postData, username, password, proxyServer);
+  var Obj;
+  
+  if (Packet == '') {
+    Obj = null;
+  } else {
+    var Deser = new ActiveXObject("WDDX.Deserializer.1");
+    Obj = Deser.deserialize(Packet);
+    Deser = null;
+  }  
+    
+  return Obj;
+}
+
+]]>
+</script>
+
+</component>
+
+
+
+
+
+
+</package>

@@ -1,0 +1,11 @@
+modStartMain = 312, 312, 1497, 962, Z
+frmPreferences = 0, 0, 0, 0, C, 104, 104, 825, 508, C
+frmSetUpNewCat = 0, 0, 0, 0, C, 156, 156, 877, 560, C
+frmSupport = 0, 0, 0, 0, C, 182, 182, 903, 586, C
+modCommonDlg = 286, 286, 1471, 936, 
+frmWallPaper = 0, 0, 0, 0, C, 0, 0, 721, 404, C
+frmRegForm = 156, 156, 1341, 806, , 130, 130, 851, 534, C
+frmLogOn = 0, 0, 0, 0, C, 78, 78, 799, 482, C
+modMain = 104, 104, 918, 447, 
+frmCancel = 0, 0, 0, 0, C, 26, 26, 747, 430, C
+frmECTray = 52, 52, 866, 395, , 52, 52, 773, 456, C

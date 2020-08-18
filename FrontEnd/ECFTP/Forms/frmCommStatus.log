@@ -1,0 +1,23 @@
+Line 69: Class FtpXCtl.FtpXCtl of control EC_FTP was not a loaded control class.
+Line 72: The property name Blocking in EC_FTP is invalid.
+Line 73: The property name DebugMode in EC_FTP is invalid.
+Line 74: The property name Directory in EC_FTP is invalid.
+Line 75: The property name DstFilename in EC_FTP is invalid.
+Line 76: The property name Host in EC_FTP is invalid.
+Line 77: The property name LogonPassword in EC_FTP is invalid.
+Line 78: The property name Pattern in EC_FTP is invalid.
+Line 79: The property name SrcFilename in EC_FTP is invalid.
+Line 80: The property name Type in EC_FTP is invalid.
+Line 81: The property name LogonName in EC_FTP is invalid.
+Line 82: The property name Account in EC_FTP is invalid.
+Line 83: The property name Timeout in EC_FTP is invalid.
+Line 84: The property name Port in EC_FTP is invalid.
+Line 85: The property name DisablePasv in EC_FTP is invalid.
+Line 86: The property name DirItemPattern in EC_FTP is invalid.
+Line 87: The property name LibraryName in EC_FTP is invalid.
+Line 88: The property name BlockingMode in EC_FTP is invalid.
+Line 89: The property name FirewallType in EC_FTP is invalid.
+Line 90: The property name FirewallHost in EC_FTP is invalid.
+Line 91: The property name FirewallPort in EC_FTP is invalid.
+Line 92: The property name FirewallLogonName in EC_FTP is invalid.
+Line 93: The property name FirewallPassword in EC_FTP is invalid.

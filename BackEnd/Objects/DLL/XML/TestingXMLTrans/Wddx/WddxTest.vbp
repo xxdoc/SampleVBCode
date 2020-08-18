@@ -1,0 +1,42 @@
+Type=Exe
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\WINNT\system32\stdole2.tlb#OLE Automation
+Reference=*\G{52E7BCF7-C4CB-4128-BA81-4DE49739D85E}#1.0#0#..\..\..\WINNT\system32\ECS\DLL\V2ECKeyBoard.dll#V2ECKeyBoard
+Reference=*\G{F99C9473-EE6A-11D1-9582-00C04FA35A24}#1.0#0#..\..\..\WINNT\system32\ECS\DLL\wddx_com.dll#wddx_com 1.0 Type Library
+Reference=*\AXMLTypes.vbp
+Object={831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0; MSCOMCTL.OCX
+Form=TestWddx.frm
+Module=modMain2; modMain2.bas
+Startup="frmTestWddx"
+ExeName32="WddxTest.exe"
+Command32=""
+Name="Project1"
+HelpContextID="0"
+CompatibleMode="0"
+MajorVer=1
+MinorVer=0
+RevisionVer=0
+AutoIncrementVer=0
+ServerSupportFiles=0
+VersionCompanyName="XL Sure Software"
+CompilationType=0
+OptimizationType=0
+FavorPentiumPro(tm)=0
+CodeViewDebugInfo=0
+NoAliasing=0
+BoundsCheck=0
+OverflowCheck=0
+FlPointCheck=0
+FDIVCheck=0
+UnroundedFP=0
+StartMode=0
+Unattended=0
+Retained=0
+ThreadPerObject=0
+MaxNumberOfThreads=1
+
+[MS Transaction Server]
+AutoRefresh=1
+
+[RVB]
+DeleteClass1=modXMLTypes
+DeleteClass2=Form1

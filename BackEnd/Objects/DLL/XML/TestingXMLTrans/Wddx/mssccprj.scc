@@ -1,0 +1,9 @@
+SCC = This is a Source Code Control file
+
+[WddxTest.vbp]
+SCC_Aux_Path = "C:\VBDEV\Apps\ECS_VSS_V2"
+SCC_Project_Name = "$/EasyClaimV2/BackEnd/Objects/DLL/XML/TestingXMLTrans/Wddx", TOIAAAAA
+
+[XMLTypes.vbp]
+SCC_Aux_Path = "C:\VBDEV\Apps\ECS_VSS_V2"
+SCC_Project_Name = "$/EasyClaimV2/BackEnd/Objects/DLL/XML/TestingXMLTrans/Wddx", TOIAAAAA
