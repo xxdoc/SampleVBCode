@@ -1,0 +1,47 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTPhotoLogHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTPhotoLogHistory]
+GO
+
+CREATE TABLE [dbo].[RTPhotoLogHistory] (
+	[RTPhotoLogHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[RTPhotoLogID] [int] NOT NULL ,
+	[RTPhotoReportID] [int] NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[BillingCountID] [int] NULL ,
+	[ID] [int] NULL ,
+	[IDRTPhotoReport] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[IDBillingCount] [int] NULL ,
+	[PhotoDate] [datetime] NULL ,
+	[SortOrder] [int] NULL ,
+	[Description] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PhotoName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Photo] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DownloadPhoto] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLogHistory_DownloadPhoto] DEFAULT (0),
+	[UpLoadPhoto] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLogHistory_UpLoadPhoto] DEFAULT (0),
+	[PhotoThumb] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DownloadPhotoThumb] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLogHistory_DownloadPhotoThumb] DEFAULT (0),
+	[UpLoadPhotoThumb] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLogHistory_UpLoadPhotoThumb] DEFAULT (0),
+	[PhotoHighRes] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DownloadPhotoHighRes] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLogHistory_DownloadPhotoHighRes] DEFAULT (0),
+	[UploadPhotoHighRes] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLogHistory_UploadPhotoHishRes] DEFAULT (0),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLogHistory_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLogHistory_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLogHistory_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTPhotoLogHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[RTPhotoLogHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTPhotoLogHistory_RTPhotoLog] FOREIGN KEY 
+	(
+		[RTPhotoLogID]
+	) REFERENCES [dbo].[RTPhotoLog] (
+		[RTPhotoLogID]
+	)
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,254 @@
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SplitPolicyLimits]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[SplitPolicyLimits]
+GO
+
+/******************************************************************
+*
+*    	Description:	Creates Table of Policy Limits
+*			By Parsing a Deliminated String
+*	Instructions: 	Fill in the Sepecified Areas for When Adding Columns
+			Or changing Column Names Where you see
+			--*********************************
+			--BEGIN %
+			--END %
+			--*********************************
+	Notes:		Default Column Delim is 'Þ' Asc Code 222
+			Default Record Delim is '¶' Asc Code 182
+*	Author: 	Brad Skidmore
+*	Date: 		4/1/2004
+*
+******************************************************************/
+
+CREATE FUNCTION dbo.SplitPolicyLimits
+(
+	@txtList 	text,
+	@COLUMN_DELIM	varchar(1)='*' ,
+	@RECORD_DELIM	varchar(1)='*'
+)
+RETURNS 
+@tblList table
+(	
+	--*********************************
+	--BEGIN Enter Table Columns 
+	--Table Name: PolicyLimits
+	PolicyLimitsID		int,
+	AssignmentsID		int,
+	[ID]		 	int,
+	IDAssignments		int,
+	ClassTypeID 		int,
+	LimitAmount 		money,
+	RCSaidProp 		money,
+	Reserves 		money,
+	IsDeleted		bit,
+	DownLoadMe		bit,
+	UpLoadMe		bit,
+	AdminComments		Varchar(255),
+	DateLastUpdated 	datetime,
+	UpdateByUserID		int,
+	FarmersUnitRowID	varchar(20)
+	--END Enter Table Columns 
+)	--*********************************
+AS
+BEGIN
+	--Check the DELIM CHARS
+	IF @COLUMN_DELIM = '*'
+	BEGIN
+		SET @COLUMN_DELIM = dbo.GetCOLUMN_DELIM()
+	END
+	IF @RECORD_DELIM = '*'
+	BEGIN
+		SET @RECORD_DELIM = dbo.GetRECORD_DELIM()
+	END
+
+	--*********************************
+	--BEGIN Text Parse vars for Table Columns
+	--Table Name: PolicyLimits
+	DECLARE @PolicyLimitsID		varchar(10)	--Max of 10 digits for Int
+	DECLARE @AssignmentsID		varchar(10)	--Max of 10 digits for Int
+	DECLARE @ID		 	varchar(10)	--Max of 10 digits for Int
+	DECLARE @IDAssignments		varchar(10)	--Max of 10 digits for Int
+	DECLARE @ClassTypeID 		varchar(10)	--Max of 10 digits for Int
+	DECLARE @LimitAmount 		varchar(20)	--Max of 20 digits for Money If the Actual amount exeecds Money Type Overflow error will occur
+	DECLARE @RCSaidProp 		varchar(20)	--Max of 20 digits for Money If the Actual amount exeecds Money Type Overflow error will occur
+	DECLARE @Reserves 		varchar(20)	--Max of 20 digits for Money If the Actual amount exeecds Money Type Overflow error will occur
+	DECLARE @IsDeleted		varchar(1)	--Max of 1 digits for bit
+	DECLARE @DownLoadMe		varchar(1)	--Max of 1 digits for bit
+	DECLARE @UpLoadMe		varchar(1)	--Max of 1 digits for bit
+	DECLARE @AdminComments 		varchar(255)	--Use 255
+	DECLARE @DateLastUpdated 	varchar(50)	--Max of 5 Chars for DateTime
+	DECLARE @UpdateByUserID		varchar(50)	--Max of 1 Chars for DateTime
+	DECLARE @FarmersUnitRowID	varchar(20)	--Use 20
+	--END Text Parse for Table Columns
+	--*********************************
+	DECLARE @MaxCount 		int --Maximum num of Records in the current chunk
+	DECLARE @txtLen			int --Len of the Chunk
+	DECLARE @txtPos			int --start pos of the current chunk
+	DECLARE @GetMyChunk		varchar(8000)--text data of current chunk 
+	DECLARE @ChunkList 		varchar(8000)--Processing Current Chunk 
+	DECLARE @Pos 			int --Pos for parsing ChunkList
+	DECLARE @Len 			int --Len for Parsing ChunkList
+	DECLARE @Count 			int --Number of Records in ChunkList
+	
+	SET @txtLen = 8000	--Set the Max Len a varchar can hold (Chunk the BLOB text)
+	SET @txtPos = 1		--Start at 1 pos of the Blob text
+
+	--Get the first Chunck
+	SET @GetMyChunk = SUBSTRING(@txtList, @txtPos, @txtLen) 	
+	WHILE DATALENGTH(@GetMyChunk) > 0
+	BEGIN
+		Set @Count =0
+		SET @ChunkList = @GetMyChunk
+		SET @MaxCount = dbo.CountTextFrequency(@ChunkList, @RECORD_DELIM)
+		WHILE DATALENGTH(@ChunkList) > 0 And @Count < @MaxCount
+		BEGIN
+			SET @Pos = 1
+			--*********************************
+			--Begin Parse of Text vars for Table Columns
+			--First Column in Record @PolicyLimitsID
+			Set @Len = CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos) -1
+			SET @PolicyLimitsID = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@PolicyLimitsID)+ 1
+
+			--Next Column @AssignmentsID
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @AssignmentsID = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@AssignmentsID) + 1
+			
+			--Next Column @ID
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @ID = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@ID) + 1
+			
+			--Next Column @IDAssignments
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @IDAssignments = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@IDAssignments) + 1
+			
+			--Next Column @ClassTypeID
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @ClassTypeID = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@ClassTypeID) + 1
+			
+			--Next Column @LimitAmount
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @LimitAmount = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@LimitAmount) + 1
+			
+			--Next Column @RCSaidProp
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @RCSaidProp = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@RCSaidProp) + 1
+			
+			--Next Column @Reserves
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @Reserves = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@Reserves) + 1
+			
+			--Next Column @IsDeleted
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @IsDeleted = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@IsDeleted) + 1
+
+			--Next Column @DownLoadMe
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @DownLoadMe = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@DownLoadMe) + 1
+
+			--Next Column  @UpLoadMe
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @UpLoadMe = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@UpLoadMe) + 1
+
+			--Next Column @AdminComments
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @AdminComments = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@AdminComments) + 1
+
+			--Next Column @DateLastUpdated
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @DateLastUpdated = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@DateLastUpdated) + 1
+
+			--Next Column @UpdateByUserID 
+			SET @Len = (CHARINDEX(@COLUMN_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @UpdateByUserID = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@UpdateByUserID) + 1
+			
+			--Last Column in Record Need to Use Record_Delim			
+			SET @Len = (CHARINDEX(@RECORD_DELIM, @ChunkList, @Pos)- 1) - (@Pos -1)
+			SET @FarmersUnitRowID = SUBSTRING(@ChunkList , @Pos , @Len )
+			SET @Pos = @Pos + DATALENGTH(@FarmersUnitRowID) + 1
+			--END Parse of Text vars for Table Columns
+			--INsert This Policy Limit
+			--*********************************
+			
+			INSERT INTO @tblList	(
+								--*********************************
+								--Begin Column Names Insert
+								PolicyLimitsID,
+								AssignmentsID,
+								[ID],
+								IDAssignments,
+								ClassTypeID,
+								LimitAmount,
+								RCSaidProp,
+								Reserves,
+								IsDeleted,
+								DownLoadMe,
+								UpLoadMe,
+								AdminComments,
+								DateLastUpdated,
+								UpdateByUserID,
+								FarmersUnitRowID
+
+								--END Column Names Insert
+								--*********************************
+						) 
+			VALUES 			(	
+								--*********************************
+								--Begin Column Values Insert
+								CAST(@PolicyLimitsID As int),
+								CAST(@AssignmentsID As int),
+								CAST(@ID As int),
+								CAST(@IDAssignments As int),
+								CAST(@ClassTypeID As int),
+								CAST(@LimitAmount As Money),
+								CAST(@RCSaidProp As Money),
+								CAST(@Reserves As Money),
+								CAST(@IsDeleted As Bit),
+								CAST(@DownLoadMe As Bit),
+								CAST(@UpLoadMe As Bit),
+								@AdminComments, --Don't Cast Varchars... This is to Allow Truncation errors to occur 
+								CAST(@DateLastUpdated As DateTime),
+								CAST(@UpdateByUserID As int),
+								@FarmersUnitRowID
+								--END Column Values Insert
+								--*********************************
+						) 
+			SET @ChunkList = STUFF(@ChunkList, 1, (@Pos-1),'')
+			Set @Count = @Count + 1
+		END
+		--Get Subsequent Chuncks
+		-- incase the current chunk cuts off the in the middle of a record
+		-- Need to Start from the begin pos of that record Do this by - DATALENGTH(@ChunkList)
+		SET @txtPos = @txtPos + (@txtLen - DATALENGTH(@ChunkList)) 
+		SET @GetMyChunk = SUBSTRING(@txtList, @txtPos, @txtLen) 
+	END
+	
+	RETURN
+END
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+GRANT  REFERENCES  ON [dbo].[SplitPolicyLimits]  TO [CFUSER]
+GO
+

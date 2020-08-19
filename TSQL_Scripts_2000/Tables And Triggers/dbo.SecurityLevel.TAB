@@ -1,0 +1,23 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SecurityLevel]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SecurityLevel]
+GO
+
+CREATE TABLE [dbo].[SecurityLevel] (
+	[SecurityLevel] [int] IDENTITY (1, 1) NOT NULL ,
+	[Name] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_SecurityLevel_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_SecurityLevel] PRIMARY KEY  CLUSTERED 
+	(
+		[SecurityLevel]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_SecurityLevel] UNIQUE  NONCLUSTERED 
+	(
+		[Name]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY]
+GO
+
+

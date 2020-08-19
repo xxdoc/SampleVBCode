@@ -1,0 +1,31 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[HTTPLog]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[HTTPLog]
+GO
+
+CREATE TABLE [dbo].[HTTPLog] (
+	[HTTPLogID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClientHost] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[username] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LogTime] [datetime] NOT NULL ,
+	[service] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[machine] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[serverip] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[processingtime] [int] NOT NULL ,
+	[bytesrecvd] [int] NOT NULL ,
+	[bytessent] [int] NOT NULL ,
+	[servicestatus] [int] NOT NULL ,
+	[win32status] [int] NOT NULL ,
+	[operation] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[target] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[parameters] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	CONSTRAINT [PK_HTTPLog] PRIMARY KEY  CLUSTERED 
+	(
+		[HTTPLogID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY]
+GO
+
+ CREATE  INDEX [IX_HTTPLog_LogTime] ON [dbo].[HTTPLog]([LogTime]) WITH  FILLFACTOR = 90 ON [PRIMARY]
+GO
+
+

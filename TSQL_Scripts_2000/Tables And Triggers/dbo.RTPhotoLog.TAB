@@ -1,0 +1,62 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTPhotoLog]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTPhotoLog]
+GO
+
+CREATE TABLE [dbo].[RTPhotoLog] (
+	[RTPhotoLogID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[RTPhotoReportID] [int] NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[BillingCountID] [int] NULL ,
+	[ID] [int] NULL ,
+	[IDRTPhotoReport] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[IDBillingCount] [int] NULL ,
+	[PhotoDate] [datetime] NULL ,
+	[SortOrder] [int] NULL ,
+	[Description] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PhotoName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Photo] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_RTPhotoLog_Photo] DEFAULT (''),
+	[DownloadPhoto] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLog_DownloadPhoto] DEFAULT (0),
+	[UpLoadPhoto] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLog_UpLoadPhoto] DEFAULT (0),
+	[PhotoThumb] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_RTPhotoLog_PhotoThumb] DEFAULT (''),
+	[DownloadPhotoThumb] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLog_DownloadPhotoThumb] DEFAULT (0),
+	[UpLoadPhotoThumb] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLog_UpLoadPhotoThumb] DEFAULT (0),
+	[PhotoHighRes] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_RTPhotoLog_PhotoHighRes] DEFAULT (''),
+	[DownloadPhotoHighRes] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLog_DownloadPhotoHighRes] DEFAULT (0),
+	[UploadPhotoHighRes] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLog_UploadPhotoHishRes] DEFAULT (0),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLog_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLog_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTPhotoLog_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTPhotoLog] PRIMARY KEY  CLUSTERED 
+	(
+		[RTPhotoLogID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_RTPhotoLog] UNIQUE  NONCLUSTERED 
+	(
+		[RTPhotoLogID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTPhotoLog_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	),
+	CONSTRAINT [FK_RTPhotoLog_BillingCount] FOREIGN KEY 
+	(
+		[BillingCountID]
+	) REFERENCES [dbo].[BillingCount] (
+		[BillingCountID]
+	),
+	CONSTRAINT [FK_RTPhotoLog_RTPhotoReport] FOREIGN KEY 
+	(
+		[RTPhotoReportID]
+	) REFERENCES [dbo].[RTPhotoReport] (
+		[RTPhotoReportID]
+	)
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

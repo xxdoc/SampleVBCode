@@ -1,0 +1,42 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[Adjuster]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[Adjuster]
+GO
+
+CREATE TABLE [dbo].[Adjuster] (
+	[CompanyID] [int] NOT NULL ,
+	[UsersID] [int] NOT NULL ,
+	[MaxOpenAssgn] [int] NOT NULL CONSTRAINT [DF_Adjuster_MaxOpenAssgn] DEFAULT (0),
+	[HomeBaseZip] [int] NULL CONSTRAINT [DF_Adjuster_HomeBaseZip] DEFAULT (0),
+	[MaxRangeFromHomeBaseZip] [int] NULL CONSTRAINT [DF_Adjuster_MaxRangeFromHomeBaseZip] DEFAULT (0),
+	[Active] [bit] NOT NULL CONSTRAINT [DF_Adjuster_Active] DEFAULT (1),
+	[DateLastUpdated] [datetime] NULL ,
+	[UpdateByUserID] [int] NULL ,
+	CONSTRAINT [PK_CompanyAdjusterUsers] PRIMARY KEY  CLUSTERED 
+	(
+		[CompanyID],
+		[UsersID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_Adjuster_AdjusterUsersSoftware] FOREIGN KEY 
+	(
+		[UsersID]
+	) REFERENCES [dbo].[AdjusterUsersSoftware] (
+		[UsersID]
+	),
+	CONSTRAINT [FK_Adjuster_AdjusterUsersUpdates] FOREIGN KEY 
+	(
+		[UsersID]
+	) REFERENCES [dbo].[AdjusterUsersUpdates] (
+		[UsersID]
+	),
+	CONSTRAINT [FK_CompanyAdjusterUsers_CompanyUsers] FOREIGN KEY 
+	(
+		[CompanyID],
+		[UsersID]
+	) REFERENCES [dbo].[CompanyUsers] (
+		[CompanyID],
+		[UsersID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

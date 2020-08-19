@@ -1,0 +1,33 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[ClientCoAdjusterSpecHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[ClientCoAdjusterSpecHistory]
+GO
+
+CREATE TABLE [dbo].[ClientCoAdjusterSpecHistory] (
+	[AdjusterSpecHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClientCoAdjusterSpecID] [int] NOT NULL ,
+	[ClientCompanyID] [int] NOT NULL ,
+	[UsersID] [int] NOT NULL ,
+	[ACID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ACIDDescription] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Comments] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ClientCompanyCatSpecID] [int] NULL ,
+	[ZipCode] [int] NULL ,
+	[ZipCodeCount] [int] NULL ,
+	[ActiveDate] [datetime] NOT NULL CONSTRAINT [DF_AdjusterSpecHistory_ActiveDate] DEFAULT (getdate()),
+	[InactiveDate] [datetime] NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_AdjusterSpecHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[AdjusterSpecHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_AdjusterSpecHistory_AdjusterSpec] FOREIGN KEY 
+	(
+		[ClientCoAdjusterSpecID]
+	) REFERENCES [dbo].[ClientCoAdjusterSpec] (
+		[ClientCoAdjusterSpecID]
+	)
+) ON [PRIMARY]
+GO
+
+

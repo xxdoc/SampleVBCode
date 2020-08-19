@@ -1,0 +1,16 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[Group]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[Group]
+GO
+
+CREATE TABLE [dbo].[Group] (
+	[GroupID] [int] IDENTITY (1, 1) NOT NULL ,
+	[Name] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Description] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	CONSTRAINT [PK_Group] PRIMARY KEY  CLUSTERED 
+	(
+		[GroupID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY]
+GO
+
+

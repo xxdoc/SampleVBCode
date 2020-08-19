@@ -1,0 +1,27 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[TransType]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[TransType]
+GO
+
+CREATE TABLE [dbo].[TransType] (
+	[TransTypeID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClientCompanyID] [int] NOT NULL ,
+	[Inbound] [bit] NOT NULL CONSTRAINT [DF_TransType_Inbound] DEFAULT (1),
+	[AllowProcessDefault] [bit] NOT NULL CONSTRAINT [DF_TransType_AllowProcessDefault] DEFAULT (1),
+	[TransType] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Definition] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_TransType_Definition] DEFAULT (''),
+	[DateLastUpdated] [datetime] NOT NULL CONSTRAINT [DF_TransType_DateLastUpdated] DEFAULT (getdate()),
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_TransType] PRIMARY KEY  CLUSTERED 
+	(
+		[TransTypeID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_TransType_Company] FOREIGN KEY 
+	(
+		[ClientCompanyID]
+	) REFERENCES [dbo].[Company] (
+		[CompanyID]
+	)
+) ON [PRIMARY]
+GO
+
+

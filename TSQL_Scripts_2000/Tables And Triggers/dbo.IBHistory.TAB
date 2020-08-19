@@ -1,0 +1,70 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[IBHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[IBHistory]
+GO
+
+CREATE TABLE [dbo].[IBHistory] (
+	[IBHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[IBID] [int] NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[BillingCountID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[IDBillingCount] [int] NOT NULL ,
+	[IB00_lssn] [numeric](9, 0) NULL ,
+	[IB01_sSubToCarrier] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB02_sIBNumber] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB05_sLocation] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB05a_sState] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB06_dtDateClosed] [datetime] NULL ,
+	[IB07_sAdjusterName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB09_sSALN] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB09a_sPolicyNo] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB10_sInsuredName] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB11_sLossLocation] [varchar] (254) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB12_dtDateOfLoss] [datetime] NULL ,
+	[IB13_cGrossLoss] [money] NULL ,
+	[IB14_cDepreciation] [money] NULL ,
+	[IB14a_sSupplement] [int] NOT NULL CONSTRAINT [DF_IBHistory_IB14a_sSupplement] DEFAULT (0),
+	[IB14b_sRebilled] [int] NOT NULL CONSTRAINT [DF_IBHistory_IB14b_sRebilled] DEFAULT (0),
+	[IB15_cDeductible] [money] NULL ,
+	[IB15a_cLessExcessLimits] [money] NULL ,
+	[IB15b_sExcessLimDesc] [varchar] (254) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB15c_cLessMiscellaneous] [money] NULL ,
+	[IB15d_cMiscellaneousDesc] [varchar] (254) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB16_cNetClaim] [money] NULL ,
+	[IB17_cServiceFee] [money] NULL ,
+	[IB17a_cMiscServiceFee] [money] NULL ,
+	[IB18_sServiceFeeComment] [varchar] (254) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB18a_sMiscServiceFeeComment] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB25_cServiceFeeSubTotal] [money] NULL ,
+	[IB29a_sMiscExpenseFeeComment] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IB29b_cMiscExpenseFee] [money] NULL ,
+	[IB30_cTotalExpenses] [money] NULL ,
+	[IB31_dTaxPercent] [numeric](8, 3) NULL ,
+	[IB32_cTaxAmount] [money] NULL ,
+	[IB33_cTotalAdjustingFee] [money] NULL ,
+	[IB33a_sAccountCode] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FeeScheduleID] [int] NULL ,
+	[Void] [bit] NOT NULL CONSTRAINT [DF_IBHistory_Void] DEFAULT (0),
+	[FeeByTime] [bit] NULL CONSTRAINT [DF_IBHistory_FeeByTime] DEFAULT (0),
+	[UseActivityTime] [bit] NULL CONSTRAINT [DF_IBHistory_UseActivityTime] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_IBHistory_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_IBHistory_UploadMe] DEFAULT (0),
+	[Comments] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_IBHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[IBHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_IBHistory_IB] FOREIGN KEY 
+	(
+		[IBID]
+	) REFERENCES [dbo].[IB] (
+		[IBID]
+	)
+) ON [PRIMARY]
+GO
+
+

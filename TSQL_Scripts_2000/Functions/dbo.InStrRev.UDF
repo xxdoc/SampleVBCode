@@ -1,0 +1,61 @@
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[InStrRev]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[InStrRev]
+GO
+
+/******************************************************************
+*
+*    	Description:	Get InStrRev
+*			Returns the position of the last 
+			occurrence of one string within another
+
+*	
+*	Author: 	Brad Skidmore
+*	Date: 		4/7/2004
+*
+******************************************************************/
+
+CREATE FUNCTION dbo.InStrRev
+(
+	@StringCheck 	varchar(8000), 
+	@StringMatch 	varchar(8000), 
+	@Start 		int = -1
+)
+RETURNS int
+AS
+BEGIN
+	DECLARE @Pos Int
+	--Check the Start pos.
+	IF @Start > 0 And DATALENGTH(@StringCheck) > 0 And @Start <= DATALENGTH(@StringCheck)
+	BEGIN
+		SET @StringCheck = Left(@StringCheck, @Start)
+	END
+	SET @Pos = (SELECT DATALENGTH(@StringCheck) + 1 - CHARINDEX(REVERSE(@StringMatch), REVERSE(@StringCheck)))
+	IF @Pos > DATALENGTH(@StringCheck)
+	BEGIN
+		SET @Pos = -1
+	END
+	ELSE IF DATALENGTH(@StringMatch) > 1
+	BEGIN
+		SET @Pos = @Pos - (DATALENGTH(@StringMatch)-1)
+	END
+	IF @Pos < 0
+	BEGIN
+		SET @Pos = 0
+	END
+	RETURN(@Pos)
+END
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+GRANT  EXECUTE  ON [dbo].[InStrRev]  TO [CFUSER]
+GO
+

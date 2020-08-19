@@ -1,0 +1,49 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[ApplicationHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[ApplicationHistory]
+GO
+
+CREATE TABLE [dbo].[ApplicationHistory] (
+	[ApplicationID] [int] NOT NULL ,
+	[AppNameBase] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[AppName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Version] [int] NOT NULL CONSTRAINT [DF_ApplicationHistory_Version] DEFAULT (1),
+	[MajorVS] [int] NOT NULL ,
+	[MinorVS] [int] NOT NULL ,
+	[RevisionVS] [int] NOT NULL ,
+	[SPVersionBase] [int] NULL ,
+	[SPVersion] [int] NULL ,
+	[VersionDate] [datetime] NOT NULL ,
+	[ProjectName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ClassName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SectionLevel01] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ApplicationHistory_SectionLevel01] DEFAULT (''),
+	[SectionLevel02] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ApplicationHistory_SectionLevel02] DEFAULT (''),
+	[SectionLevel03] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ApplicationHistory_SectionLevel03] DEFAULT (''),
+	[SectionLevel04] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ApplicationHistory_SectionLevel04] DEFAULT (''),
+	[SectionLevel05] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ApplicationHistory_SectionLevel05] DEFAULT (''),
+	[InstallFileLocation] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[SPName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[SELF_REG] [bit] NOT NULL CONSTRAINT [DF_ApplicationHistory_SELF_REG] DEFAULT (1),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_ApplicationHistory_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_ApplicationHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[ApplicationID],
+		[Version]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_ApplicationHistory] UNIQUE  NONCLUSTERED 
+	(
+		[ApplicationID],
+		[Version]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_ApplicationHistory_Application] FOREIGN KEY 
+	(
+		[ApplicationID]
+	) REFERENCES [dbo].[Application] (
+		[ApplicationID]
+	)
+) ON [PRIMARY]
+GO
+
+

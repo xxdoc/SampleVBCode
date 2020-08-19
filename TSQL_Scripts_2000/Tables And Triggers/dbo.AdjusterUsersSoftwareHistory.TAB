@@ -1,0 +1,29 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[AdjusterUsersSoftwareHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[AdjusterUsersSoftwareHistory]
+GO
+
+CREATE TABLE [dbo].[AdjusterUsersSoftwareHistory] (
+	[AdjusterUsersSoftwareHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[UsersID] [int] NOT NULL ,
+	[VersionInfo] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[LicenseDaysLeft] [smallint] NULL CONSTRAINT [DF_UsersSoftwareHistory_LicenseDaysLeft] DEFAULT (0),
+	[ResetLicense] [bit] NULL CONSTRAINT [DF_UsersSoftwareHistory_ResetLicense] DEFAULT (0),
+	[IBPrefix] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ResetIBPrefix] [bit] NULL CONSTRAINT [DF_UsersSoftwareHistory_ResetIBPrefix] DEFAULT (0),
+	[SingleFileSendAuthority] [bit] NULL CONSTRAINT [DF_AdjusterUsersSoftwareHistory_SingleFileSendAuthority] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_UsersSoftwareHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[AdjusterUsersSoftwareHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_UsersSoftwareHistory_UsersSoftware] FOREIGN KEY 
+	(
+		[UsersID]
+	) REFERENCES [dbo].[AdjusterUsersSoftware] (
+		[UsersID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

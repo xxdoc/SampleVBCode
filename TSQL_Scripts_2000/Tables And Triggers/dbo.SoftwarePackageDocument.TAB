@@ -1,0 +1,31 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SoftwarePackageDocument]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SoftwarePackageDocument]
+GO
+
+CREATE TABLE [dbo].[SoftwarePackageDocument] (
+	[DocumentID] [int] NOT NULL ,
+	[SoftWarePackageID] [int] NOT NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_SoftwarePackageDocument_Active] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_SoftwarePackageDocument] PRIMARY KEY  CLUSTERED 
+	(
+		[DocumentID],
+		[SoftWarePackageID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_SoftwarePackageDocument_Document] FOREIGN KEY 
+	(
+		[DocumentID]
+	) REFERENCES [dbo].[Document] (
+		[DocumentID]
+	),
+	CONSTRAINT [FK_SoftwarePackageDocument_SoftwarePackage] FOREIGN KEY 
+	(
+		[SoftWarePackageID]
+	) REFERENCES [dbo].[SoftwarePackage] (
+		[SoftWarePackageID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,33 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTIBFeeHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTIBFeeHistory]
+GO
+
+CREATE TABLE [dbo].[RTIBFeeHistory] (
+	[RTIBFeeHistoryID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[RTIBFeeID] [int] NOT NULL ,
+	[AssignmentsID] [int] NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[FeeScheduleFeeTypesID] [int] NULL ,
+	[NumberOfItems] [int] NULL ,
+	[Amount] [money] NULL ,
+	[Comment] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DownLoadMe] [bit] NULL CONSTRAINT [DF_RTIBFeeHistory_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NULL CONSTRAINT [DF_RTIBFeeHistory_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NULL ,
+	[UpdateByUserID] [int] NULL ,
+	CONSTRAINT [PK_RTIBFeeHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[RTIBFeeHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTIBFeeHistory_RTIBFee] FOREIGN KEY 
+	(
+		[RTIBFeeID]
+	) REFERENCES [dbo].[RTIBFee] (
+		[RTIBFeeID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,35 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[FeeScheduleFeeTypesHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[FeeScheduleFeeTypesHistory]
+GO
+
+CREATE TABLE [dbo].[FeeScheduleFeeTypesHistory] (
+	[FeeScheduleFeeTypesHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[FeeScheduleFeeTypesID] [int] NOT NULL ,
+	[FeeScheduleID] [int] NOT NULL ,
+	[TypeNum] [int] NULL ,
+	[Name] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[FeeAmount] [money] NOT NULL CONSTRAINT [DF_FeeScheduleFeeTypesHistory_FeeAmount] DEFAULT (0.00),
+	[IsExpense] [bit] NULL CONSTRAINT [DF_FeeScheduleFeeTypesHistory_IsExpense] DEFAULT (0),
+	[MaxNumberOfItems] [int] NULL ,
+	[MaxFeeAmount] [money] NULL CONSTRAINT [DF_FeeScheduleFeeTypesHistory_MaxFeeAmount] DEFAULT (0),
+	[IsMiscAmount] [bit] NULL CONSTRAINT [DF_FeeScheduleFeeTypesHistory_IsMiscAmount] DEFAULT (0),
+	[UseFormula] [bit] NULL CONSTRAINT [DF_FeeScheduleFeeTypesHistory_UseFormula] DEFAULT (0),
+	[VBFormula] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_FeeScheduleFeeTypesHistory_VBFormula] DEFAULT (''),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_FeeScheduleFeeTypesHistory_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_FeeScheduleFeeTypesHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[FeeScheduleFeeTypesHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_FeeScheduleFeeTypesHistory_FeeScheduleFeeTypes] FOREIGN KEY 
+	(
+		[FeeScheduleFeeTypesID]
+	) REFERENCES [dbo].[FeeScheduleFeeTypes] (
+		[FeeScheduleFeeTypesID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

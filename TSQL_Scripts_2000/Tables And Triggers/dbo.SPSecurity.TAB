@@ -1,0 +1,28 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SPSecurity]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SPSecurity]
+GO
+
+CREATE TABLE [dbo].[SPSecurity] (
+	[SecurityPackageID] [int] NOT NULL ,
+	[SecurityID] [int] NOT NULL ,
+	CONSTRAINT [PK_SPSecurity] PRIMARY KEY  CLUSTERED 
+	(
+		[SecurityPackageID],
+		[SecurityID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_SPSecurity_Security] FOREIGN KEY 
+	(
+		[SecurityID]
+	) REFERENCES [dbo].[Security] (
+		[SecurityID]
+	),
+	CONSTRAINT [FK_SPSecurity_SecurityPackage] FOREIGN KEY 
+	(
+		[SecurityPackageID]
+	) REFERENCES [dbo].[SecurityPackage] (
+		[SecurityPackageID]
+	)
+) ON [PRIMARY]
+GO
+
+

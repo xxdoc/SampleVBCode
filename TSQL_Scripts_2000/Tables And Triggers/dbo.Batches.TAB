@@ -1,0 +1,68 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[Batches]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[Batches]
+GO
+
+CREATE TABLE [dbo].[Batches] (
+	[BatchesID] [int] IDENTITY (1, 1) NOT NULL ,
+	[AssignmentsID] [int] NULL ,
+	[ClientCompanyCatSpecID] [int] NOT NULL ,
+	[ssn] [numeric](9, 0) NULL ,
+	[ibnumber] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[date] [datetime] NULL ,
+	[EnteredDate] [datetime] NULL ,
+	[adj_name] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[adjuster_n] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[claimnumber] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[insuredname] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[loss_loc] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[losscity] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[lossstate] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[dateofloss] [datetime] NULL ,
+	[dateclosed] [datetime] NULL ,
+	[grossloss] [decimal](20, 5) NULL ,
+	[totalservice] [decimal](20, 5) NULL ,
+	[administrative] [decimal](20, 5) NULL ,
+	[misccharge] [decimal](20, 5) NULL ,
+	[taxestotal] [decimal](20, 5) NULL ,
+	[totalfee] [decimal](20, 5) NULL ,
+	[catsite] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Void] [bit] NOT NULL CONSTRAINT [DF_Batches_Void] DEFAULT (0),
+	[billingdup] [bit] NULL ,
+	[ecupdated] [bit] NULL ,
+	[copied] [int] NULL ,
+	[duplicate] [bit] NULL ,
+	[Comments] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Reassigned] [int] NULL CONSTRAINT [DF_Batches_Reassigned_1] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	[BillAssignmentID] [int] NULL ,
+	CONSTRAINT [PK_Batches] PRIMARY KEY  CLUSTERED 
+	(
+		[BatchesID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_Batches_ibnumber] UNIQUE  NONCLUSTERED 
+	(
+		[ibnumber]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_Batches_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	),
+	CONSTRAINT [FK_Batches_BillAssignment] FOREIGN KEY 
+	(
+		[BillAssignmentID]
+	) REFERENCES [dbo].[BillAssignment] (
+		[BillAssignmentID]
+	),
+	CONSTRAINT [FK_Batches_CompanyCatSpec] FOREIGN KEY 
+	(
+		[ClientCompanyCatSpecID]
+	) REFERENCES [dbo].[ClientCompanyCatSpec] (
+		[ClientCompanyCatSpecID]
+	)
+) ON [PRIMARY]
+GO
+
+

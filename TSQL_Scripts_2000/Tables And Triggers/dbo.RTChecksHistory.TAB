@@ -1,0 +1,44 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTChecksHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTChecksHistory]
+GO
+
+CREATE TABLE [dbo].[RTChecksHistory] (
+	[RTChecksHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[RTChecksID] [int] NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[BillingCountID] [int] NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NOT NULL ,
+	[IDBillingCount] [int] NULL ,
+	[CheckNum] [int] NOT NULL ,
+	[RT42_ClassOfLossID] [int] NULL ,
+	[RT43_TypeOfLossID] [int] NULL ,
+	[RT50_sInsuredPayeeName] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT51_sPayeeNames] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT52_sAddress] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT53_cAmountOfCheck] [money] NULL ,
+	[AppliedDeductible] [money] NULL CONSTRAINT [DF_RTChecksHistory_AppliedDeductible] DEFAULT (0),
+	[RT54_CompanyCatSpecID] [int] NOT NULL ,
+	[tempCHeckName] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PrintOnIB] [bit] NOT NULL CONSTRAINT [DF_RTChecksHistory_PrintOnIB] DEFAULT (0),
+	[PrintedDate] [datetime] NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_RTChecksHistory_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTChecksHistory_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTChecksHistory_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTChecksHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[RTChecksHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTChecksHistory_RTChecks] FOREIGN KEY 
+	(
+		[RTChecksID]
+	) REFERENCES [dbo].[RTChecks] (
+		[RTChecksID]
+	)
+) ON [PRIMARY]
+GO
+
+

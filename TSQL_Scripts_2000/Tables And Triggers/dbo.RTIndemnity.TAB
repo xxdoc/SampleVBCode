@@ -1,0 +1,68 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTIndemnity]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTIndemnity]
+GO
+
+CREATE TABLE [dbo].[RTIndemnity] (
+	[RTIndemnityID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[RTChecksID] [int] NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[IDRTChecks] [int] NULL ,
+	[ACVClaim] [money] NOT NULL CONSTRAINT [DF_RTIndemnity_ACVClaim] DEFAULT (0),
+	[ACVLessExcessLimits] [money] NOT NULL CONSTRAINT [DF_RTIndemnity_ACVLessExcessLimits] DEFAULT (0),
+	[SpecialLimits] [money] NOT NULL CONSTRAINT [DF_RTIndemnity_SpecialLimits] DEFAULT (0),
+	[ExcessLimits] [money] NOT NULL CONSTRAINT [DF_RTIndemnity_ExcessLimits] DEFAULT (0),
+	[Miscellaneous] [money] NULL CONSTRAINT [DF_RTIndemnity_Miscellaneous] DEFAULT (0),
+	[MiscDescription] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_RTIndemnity_MiscDescription] DEFAULT (''),
+	[IsAddAmountOfInsurance] [bit] NOT NULL CONSTRAINT [DF_RTIndemnity_IsAddAmountOfInsurance] DEFAULT (0),
+	[ExcessAbsorbsDeductible] [bit] NULL CONSTRAINT [DF_RTIndemnity_ExcessAbsorbsDeductible] DEFAULT (1),
+	[AppliedDeductible] [money] NULL CONSTRAINT [DF_RTIndemnity_AppliedDeductible] DEFAULT (0),
+	[NonRecoverableDep] [money] NOT NULL CONSTRAINT [DF_RTIndemnity_NonRecoverableDep] DEFAULT (0),
+	[RecoverableDep] [money] NOT NULL CONSTRAINT [DF_RTIndemnity_RecoverableDep] DEFAULT (0),
+	[ReplacementCost] [money] NOT NULL CONSTRAINT [DF_RTIndemnity_ReplacementCost] DEFAULT (0),
+	[TypeOfLossID] [int] NOT NULL ,
+	[ClassOfLossID] [int] NOT NULL ,
+	[Description] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IsPreviousPayment] [bit] NOT NULL CONSTRAINT [DF_RTIndemnity_IsPreviousPayment] DEFAULT (0),
+	[PPayDatePaid] [datetime] NULL ,
+	[PPayAmountPaid] [money] NULL CONSTRAINT [DF_RTIndemnity_PPayAmountPaid] DEFAULT (0),
+	[PPayCheckNumber] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_RTIndemnity_PPayCheckNumber] DEFAULT (''),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_RTIndemnity_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTIndemnity_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTIndemnity_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTIndemnity] PRIMARY KEY  CLUSTERED 
+	(
+		[RTIndemnityID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTIndemnity_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	),
+	CONSTRAINT [FK_RTIndemnity_ClassOfLoss] FOREIGN KEY 
+	(
+		[ClassOfLossID]
+	) REFERENCES [dbo].[ClassOfLoss] (
+		[ClassOfLossID]
+	),
+	CONSTRAINT [FK_RTIndemnity_RTChecks] FOREIGN KEY 
+	(
+		[RTChecksID]
+	) REFERENCES [dbo].[RTChecks] (
+		[RTChecksID]
+	),
+	CONSTRAINT [FK_RTIndemnity_TypeOfLoss] FOREIGN KEY 
+	(
+		[TypeOfLossID]
+	) REFERENCES [dbo].[TypeOfLoss] (
+		[TypeOfLossID]
+	)
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,32 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[Zips]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[Zips]
+GO
+
+CREATE TABLE [dbo].[Zips] (
+	[zip] [varchar] (53) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[city] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[state] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[county] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[fips] [varchar] (53) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[areacode] [varchar] (53) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[dst] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[timezone] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[lat] [float] NULL ,
+	[lon] [float] NULL ,
+	CONSTRAINT [IX_Zips] UNIQUE  NONCLUSTERED 
+	(
+		[zip]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY]
+GO
+
+ CREATE  INDEX [IX_Zips_1] ON [dbo].[Zips]([city]) WITH  FILLFACTOR = 90 ON [PRIMARY]
+GO
+
+ CREATE  INDEX [IX_Zips_2] ON [dbo].[Zips]([state]) WITH  FILLFACTOR = 90 ON [PRIMARY]
+GO
+
+ CREATE  INDEX [IX_Zips_3] ON [dbo].[Zips]([county]) WITH  FILLFACTOR = 90 ON [PRIMARY]
+GO
+
+

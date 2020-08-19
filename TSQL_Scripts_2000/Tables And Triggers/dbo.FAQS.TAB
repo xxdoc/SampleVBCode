@@ -1,0 +1,19 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[FAQS]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[FAQS]
+GO
+
+CREATE TABLE [dbo].[FAQS] (
+	[FAQSID] [int] IDENTITY (1, 1) NOT NULL ,
+	[Question] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Answer] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_FAQS_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_FAQS] PRIMARY KEY  CLUSTERED 
+	(
+		[FAQSID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

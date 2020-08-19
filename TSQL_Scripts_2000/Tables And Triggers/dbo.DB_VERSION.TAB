@@ -1,0 +1,23 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[DB_VERSION]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[DB_VERSION]
+GO
+
+CREATE TABLE [dbo].[DB_VERSION] (
+	[Version] [int] NOT NULL CONSTRAINT [DF_DB_VERSION_Version] DEFAULT (1),
+	[Comments] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[InstallFileLocation] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DB_VERSION_InstallFileLocation] DEFAULT (''),
+	[SPName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DB_VERSION_SPName] DEFAULT (''),
+	[MainUtilInstallFileLocation] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DB_VERSION_MainUtilInstallFileLocation] DEFAULT (''),
+	[MainUtilSPName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DB_VERSION_MainUtilSPName] DEFAULT (''),
+	[MainARVInstallFileLocation] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DB_VERSION_MainARVInstallFileLocation] DEFAULT (''),
+	[MainARVSPName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DB_VERSION_MainARVSPName] DEFAULT (''),
+	[MainEXEInstallFileLocation] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DB_VERSION_MainEXEInstallFileLocation] DEFAULT (''),
+	[MainEXESPName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DB_VERSION_MainEXESPName] DEFAULT (''),
+	[MainFTPEXEInstallFileLocation] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DB_VERSION_MainFTPEXEInstallFileLocation] DEFAULT (''),
+	[MainFTPEXESPName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DB_VERSION_MainFTPEXESPName] DEFAULT (''),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,28 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SecurityGroup]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SecurityGroup]
+GO
+
+CREATE TABLE [dbo].[SecurityGroup] (
+	[SecurityID] [int] NOT NULL ,
+	[GroupID] [int] NOT NULL ,
+	CONSTRAINT [PK_SecurityGroup] PRIMARY KEY  CLUSTERED 
+	(
+		[SecurityID],
+		[GroupID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_SecurityGroup_Group] FOREIGN KEY 
+	(
+		[GroupID]
+	) REFERENCES [dbo].[Group] (
+		[GroupID]
+	),
+	CONSTRAINT [FK_SecurityGroup_Security] FOREIGN KEY 
+	(
+		[SecurityID]
+	) REFERENCES [dbo].[Security] (
+		[SecurityID]
+	)
+) ON [PRIMARY]
+GO
+
+

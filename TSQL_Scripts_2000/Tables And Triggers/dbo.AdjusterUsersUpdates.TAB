@@ -1,0 +1,34 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[AdjusterUsersUpdates]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[AdjusterUsersUpdates]
+GO
+
+CREATE TABLE [dbo].[AdjusterUsersUpdates] (
+	[UsersID] [int] NOT NULL ,
+	[FirstName] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[LastName] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SSN] [int] NULL ,
+	[Email] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ContactPhone] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmergencyPhone] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Address] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[City] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[State] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Zip] [int] NULL ,
+	[ZIP4] [int] NULL ,
+	[OtherPostCode] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_UsersUpdates] PRIMARY KEY  CLUSTERED 
+	(
+		[UsersID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_UsersUpdates_Users] FOREIGN KEY 
+	(
+		[UsersID]
+	) REFERENCES [dbo].[Users] (
+		[UsersID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

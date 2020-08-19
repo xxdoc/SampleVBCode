@@ -1,0 +1,27 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[UserProfileHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[UserProfileHistory]
+GO
+
+CREATE TABLE [dbo].[UserProfileHistory] (
+	[UserProfileHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[UserProfileID] [int] NOT NULL ,
+	[TableName] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Active] [bit] NOT NULL CONSTRAINT [DF_UserProfileHistory_Active] DEFAULT (1),
+	[SortOrder] [int] NOT NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_UserProfileHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[UserProfileHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_UserProfileHistory_UserProfile] FOREIGN KEY 
+	(
+		[UserProfileID]
+	) REFERENCES [dbo].[UserProfile] (
+		[UserProfileID]
+	)
+) ON [PRIMARY]
+GO
+
+

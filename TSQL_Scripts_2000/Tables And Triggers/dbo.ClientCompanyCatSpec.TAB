@@ -1,0 +1,56 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[ClientCompanyCatSpec]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[ClientCompanyCatSpec]
+GO
+
+CREATE TABLE [dbo].[ClientCompanyCatSpec] (
+	[ClientCompanyCatSpecID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClientCompanyID] [int] NOT NULL ,
+	[CATID] [int] NOT NULL ,
+	[CatCode] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Comments] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ActiveDate] [datetime] NOT NULL CONSTRAINT [DF_CompanyCatSpec_ActiveDate] DEFAULT (getdate()),
+	[InactiveDate] [datetime] NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	[AssignmentTypeID] [int] NOT NULL CONSTRAINT [DF_ClientCompanyCatSpec_AssignmentTypeID] DEFAULT (1),
+	CONSTRAINT [PK_CompanyCatSpec] PRIMARY KEY  CLUSTERED 
+	(
+		[ClientCompanyCatSpecID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_CompanyCatSpec] UNIQUE  NONCLUSTERED 
+	(
+		[ClientCompanyID],
+		[CatCode],
+		[ActiveDate],
+		[AssignmentTypeID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_ClientCompanyCatSpec_AssignmentType] FOREIGN KEY 
+	(
+		[AssignmentTypeID]
+	) REFERENCES [dbo].[AssignmentType] (
+		[AssignmentTypeID]
+	),
+	CONSTRAINT [FK_CompanyCatSpec_CAT] FOREIGN KEY 
+	(
+		[CATID]
+	) REFERENCES [dbo].[CAT] (
+		[CATID]
+	),
+	CONSTRAINT [FK_CompanyCatSpec_Company] FOREIGN KEY 
+	(
+		[ClientCompanyID]
+	) REFERENCES [dbo].[Company] (
+		[CompanyID]
+	),
+	CONSTRAINT [FK_CompanyCatSpec_CompanyCat] FOREIGN KEY 
+	(
+		[ClientCompanyID],
+		[CATID]
+	) REFERENCES [dbo].[ClientCompanyCat] (
+		[ClientCompanyID],
+		[CATID]
+	)
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,40 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTAttachments]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTAttachments]
+GO
+
+CREATE TABLE [dbo].[RTAttachments] (
+	[RTAttachmentsID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[AttachDate] [datetime] NOT NULL ,
+	[SortOrder] [int] NOT NULL ,
+	[Description] [varchar] (254) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RTAttachments_Description] DEFAULT (''),
+	[AttachName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Attachment] [varchar] (254) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[DownloadAttachment] [bit] NOT NULL CONSTRAINT [DF_RTAttachments_DownloadAttachment] DEFAULT (0),
+	[UpLoadAttachment] [bit] NOT NULL CONSTRAINT [DF_RTAttachments_UpLoadAttachment] DEFAULT (0),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_RTAttachments_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTAttachments_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTAttachments_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RTAttachments_AdminComments] DEFAULT (''),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTAttachments] PRIMARY KEY  CLUSTERED 
+	(
+		[RTAttachmentsID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_RTAttachments] UNIQUE  NONCLUSTERED 
+	(
+		[Attachment]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTAttachments_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	)
+) ON [PRIMARY]
+GO
+
+

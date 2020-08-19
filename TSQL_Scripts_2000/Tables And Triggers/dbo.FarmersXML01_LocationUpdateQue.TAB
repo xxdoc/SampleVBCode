@@ -1,0 +1,47 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[FarmersXML01_LocationUpdateQue]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[FarmersXML01_LocationUpdateQue]
+GO
+
+CREATE TABLE [dbo].[FarmersXML01_LocationUpdateQue] (
+	[AssignmentsID] [int] NOT NULL ,
+	[UnitId] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ClaimId] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ContactRowId] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[PropertyRowId] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[PropertyDescription] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_PropertyDescription] DEFAULT (''),
+	[VehicleMake] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_VehicleMake] DEFAULT (''),
+	[VehicleModel] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_VehicleModel] DEFAULT (''),
+	[VehicleYear] [varchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_VehicleYear] DEFAULT (''),
+	[InspectedVIN] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_VIN] DEFAULT (''),
+	[LocationType] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_LocationType] DEFAULT (''),
+	[LocationName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_LocationName] DEFAULT (''),
+	[LocationAddress] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_LocationAddress] DEFAULT (''),
+	[LocationCity] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_LocationCity] DEFAULT (''),
+	[LocationCountry] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_LocationCountry_1] DEFAULT (''),
+	[LocationState] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_LocationState] DEFAULT (''),
+	[LocationPostalCode] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_LocationPostalCode] DEFAULT (''),
+	[LocationPhoneNumber] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_LocationPhoneNumber_1] DEFAULT (''),
+	[GMTUpdated] [datetime] NULL ,
+	[CRNAccepted] [bit] NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_CRNAccepted] DEFAULT (0),
+	[CRNAcceptedDate] [datetime] NULL ,
+	[CRNRejected] [bit] NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_CRNRejected] DEFAULT (0),
+	[CRNRejectedDate] [datetime] NULL ,
+	[CRNRejectedReason] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_CRNRejectedReason] DEFAULT (''),
+	[SendToCRN] [bit] NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_SendToCRN] DEFAULT (0),
+	[SentToCRNDate] [datetime] NULL ,
+	[DateLastUpdated] [datetime] NOT NULL CONSTRAINT [DF_FarmersXML01_LocationUpdateQue_DateLastUpdated] DEFAULT (getdate()),
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_FarmersXML01_LocationUpdateQue] PRIMARY KEY  CLUSTERED 
+	(
+		[AssignmentsID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_FarmersXML01_LocationUpdateQue_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,21 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[ECSADJUsers]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[ECSADJUsers]
+GO
+
+CREATE TABLE [dbo].[ECSADJUsers] (
+	[UsersID] [int] NOT NULL ,
+	[AdjUID] [int] NULL ,
+	CONSTRAINT [PK_ESCADJUsers] PRIMARY KEY  CLUSTERED 
+	(
+		[UsersID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_ECSADJUsers_Users] FOREIGN KEY 
+	(
+		[UsersID]
+	) REFERENCES [dbo].[Users] (
+		[UsersID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

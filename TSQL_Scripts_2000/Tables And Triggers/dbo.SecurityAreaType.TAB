@@ -1,0 +1,18 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SecurityAreaType]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SecurityAreaType]
+GO
+
+CREATE TABLE [dbo].[SecurityAreaType] (
+	[SecurityAreaTypeID] [int] IDENTITY (1, 1) NOT NULL ,
+	[TypeName] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[TypeDescription] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NULL ,
+	[UpdateByUserID] [int] NULL ,
+	CONSTRAINT [PK_SecurityAreaType] PRIMARY KEY  CLUSTERED 
+	(
+		[SecurityAreaTypeID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,43 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[DocumentHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[DocumentHistory]
+GO
+
+CREATE TABLE [dbo].[DocumentHistory] (
+	[DocumentID] [int] NOT NULL ,
+	[DocNameBase] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DocName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Version] [int] NOT NULL ,
+	[SPVersionBase] [int] NULL ,
+	[SPVersion] [int] NULL ,
+	[VersionDate] [datetime] NOT NULL ,
+	[SectionLevel01] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DocumentHistory_SectionLevel01] DEFAULT (''),
+	[SectionLevel02] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DocumentHistory_SectionLevel02] DEFAULT (''),
+	[SectionLevel03] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DocumentHistory_SectionLevel03] DEFAULT (''),
+	[SectionLevel04] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DocumentHistory_SectionLevel04] DEFAULT (''),
+	[SectionLevel05] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_DocumentHistory_SectionLevel05] DEFAULT (''),
+	[InstallFileLocation] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[SPName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_DocumentHistory_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_DocumentHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[DocumentID],
+		[Version]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_DocumentHistory] UNIQUE  NONCLUSTERED 
+	(
+		[DocumentID],
+		[Version]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_DocumentHistory_Document] FOREIGN KEY 
+	(
+		[DocumentID]
+	) REFERENCES [dbo].[Document] (
+		[DocumentID]
+	)
+) ON [PRIMARY]
+GO
+
+

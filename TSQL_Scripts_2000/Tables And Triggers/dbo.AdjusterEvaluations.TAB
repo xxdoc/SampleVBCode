@@ -1,0 +1,67 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[AdjusterEvaluations]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[AdjusterEvaluations]
+GO
+
+CREATE TABLE [dbo].[AdjusterEvaluations] (
+	[EvaluationID] [int] IDENTITY (1, 1) NOT NULL ,
+	[EvaluationDate] [datetime] NULL ,
+	[CatCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ArrivalDate] [datetime] NULL ,
+	[DepartureDate] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[CatOfficeLocation] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[CompanyName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[AdjUID] [int] NULL ,
+	[AdjFirstName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[AdjLastName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[UserID] [int] NULL ,
+	[NumFilesAssigned] [int] NULL ,
+	[NumFilesInspected] [int] NULL ,
+	[NumFilesClosed] [int] NULL ,
+	[NumFilesAverageEstimate] [money] NULL ,
+	[DaysOnTheStorm] [int] NULL ,
+	[AverageClosingsPerDay] [float] NULL ,
+	[EstimatingPlatform] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EstimatingSkills] [int] NULL ,
+	[ComputerSkills] [int] NULL ,
+	[AccuracyofScope] [int] NULL ,
+	[PrioritizationofAssignments] [int] NULL ,
+	[Productivity] [int] NULL ,
+	[Professionalism] [int] NULL ,
+	[TelephoneFollowup] [int] NULL ,
+	[SubmitsAccurateBilling] [int] NULL ,
+	[FollowSupervisoryDirection] [int] NULL ,
+	[FileSevCompHeavy] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FileSevCompModerate] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FileSevCompLight] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[GeneralComments] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[CatRT] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[CatSupervisor] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[WindHail] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Hurricane] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Flood] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Other] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Earthquake] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FreezeStorm] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Commercial] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[OtherLossesHandled] [nvarchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[txtEstimatingSkills] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[txtComputerSkills] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[txtAccuracyofScope] [nvarchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[txtPrioritizationofAssignments] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[txtProductivity] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[txtProfessionalism] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[txtTelephoneFollowup] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[txtSubmitsAccurateBilling] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[txtFollowSupervisoryDirection] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EnteredBy] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateEntered] [datetime] NULL ,
+	[ModifiedBy] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ModifiedDate] [datetime] NULL ,
+	CONSTRAINT [PK_AdjusterEvaluations] PRIMARY KEY  CLUSTERED 
+	(
+		[EvaluationID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

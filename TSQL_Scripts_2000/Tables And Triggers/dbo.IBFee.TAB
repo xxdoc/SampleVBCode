@@ -1,0 +1,46 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[IBFee]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[IBFee]
+GO
+
+CREATE TABLE [dbo].[IBFee] (
+	[IBFeeID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[IBID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[IDIB] [int] NULL ,
+	[FeeScheduleFeeTypesID] [int] NOT NULL ,
+	[NumberOfItems] [int] NOT NULL CONSTRAINT [DF_IBFee_NumberOfItems] DEFAULT (1),
+	[Amount] [money] NOT NULL CONSTRAINT [DF_IBFee_Amount] DEFAULT (0),
+	[Comment] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_IBFee_Comment] DEFAULT (''),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_IBFee_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_IBFee_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_IBFee] PRIMARY KEY  CLUSTERED 
+	(
+		[IBFeeID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_IBFee_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	),
+	CONSTRAINT [FK_IBFee_FeeScheduleFeeTypes] FOREIGN KEY 
+	(
+		[FeeScheduleFeeTypesID]
+	) REFERENCES [dbo].[FeeScheduleFeeTypes] (
+		[FeeScheduleFeeTypesID]
+	),
+	CONSTRAINT [FK_IBFee_IB] FOREIGN KEY 
+	(
+		[IBID]
+	) REFERENCES [dbo].[IB] (
+		[IBID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

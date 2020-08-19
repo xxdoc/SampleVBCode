@@ -1,0 +1,45 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[ClassOfLoss]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[ClassOfLoss]
+GO
+
+CREATE TABLE [dbo].[ClassOfLoss] (
+	[ClassOfLossID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClientCompanyID] [int] NOT NULL ,
+	[ClassTypeID] [int] NOT NULL ,
+	[IsSubSetOFClassOfLossID] [int] NULL ,
+	[Code] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_ClassOfLoss_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_ClassOfLoss] PRIMARY KEY  CLUSTERED 
+	(
+		[ClassOfLossID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_ClassOfLoss_CompanyID_ClassTypeID] UNIQUE  NONCLUSTERED 
+	(
+		[ClientCompanyID],
+		[ClassTypeID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_ClassOfLoss_ClassOfLoss] FOREIGN KEY 
+	(
+		[IsSubSetOFClassOfLossID]
+	) REFERENCES [dbo].[ClassOfLoss] (
+		[ClassOfLossID]
+	),
+	CONSTRAINT [FK_ClassOfLoss_ClassType] FOREIGN KEY 
+	(
+		[ClassTypeID]
+	) REFERENCES [dbo].[ClassType] (
+		[ClassTypeID]
+	),
+	CONSTRAINT [FK_ClassOfLoss_Company] FOREIGN KEY 
+	(
+		[ClientCompanyID]
+	) REFERENCES [dbo].[Company] (
+		[CompanyID]
+	)
+) ON [PRIMARY]
+GO
+
+

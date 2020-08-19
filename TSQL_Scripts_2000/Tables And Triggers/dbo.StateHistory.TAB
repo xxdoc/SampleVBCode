@@ -1,0 +1,27 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[StateHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[StateHistory]
+GO
+
+CREATE TABLE [dbo].[StateHistory] (
+	[StateHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[StateID] [int] NOT NULL ,
+	[Name] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Code] [varchar] (3) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Comments] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_StateHistory_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_StateHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[StateHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_StateHistory_State] FOREIGN KEY 
+	(
+		[StateID]
+	) REFERENCES [dbo].[State] (
+		[StateID]
+	)
+) ON [PRIMARY]
+GO
+
+

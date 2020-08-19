@@ -1,0 +1,27 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[AssignmentTypeHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[AssignmentTypeHistory]
+GO
+
+CREATE TABLE [dbo].[AssignmentTypeHistory] (
+	[AssignmentTypeHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[AssignmentTypeID] [int] NOT NULL ,
+	[Type] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AssignmentTypeHistory_Description] DEFAULT (''),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AssignmentTypeHistory_AdminComments] DEFAULT (''),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_AssignmentTypeHistory_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_AssignmentTypeHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[AssignmentTypeHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_AssignmentTypeHistory_AssignmentType] FOREIGN KEY 
+	(
+		[AssignmentTypeID]
+	) REFERENCES [dbo].[AssignmentType] (
+		[AssignmentTypeID]
+	)
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,36 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SoftwarePackage]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SoftwarePackage]
+GO
+
+CREATE TABLE [dbo].[SoftwarePackage] (
+	[SoftWarePackageID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClientCompanyID] [int] NOT NULL ,
+	[CATID] [int] NOT NULL ,
+	[PackageName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[SPVersion] [int] NOT NULL CONSTRAINT [DF_SoftwarePackage_Version] DEFAULT (1),
+	[VersionDate] [datetime] NOT NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_SoftwarePackage_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_SoftwarePackage] PRIMARY KEY  CLUSTERED 
+	(
+		[SoftWarePackageID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_SoftwarePackage_1] UNIQUE  NONCLUSTERED 
+	(
+		[ClientCompanyID],
+		[CATID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_SoftwarePackage_ClientCompanyCat] FOREIGN KEY 
+	(
+		[ClientCompanyID],
+		[CATID]
+	) REFERENCES [dbo].[ClientCompanyCat] (
+		[ClientCompanyID],
+		[CATID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

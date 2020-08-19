@@ -1,0 +1,15 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[Work_ListText]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[Work_ListText]
+GO
+
+CREATE TABLE [dbo].[Work_ListText] (
+	[Work_ListTextID] [uniqueidentifier] NOT NULL CONSTRAINT [DF_Work_ListText_Work_ListTextID] DEFAULT (newid()),
+	[ListText] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	CONSTRAINT [PK_Work_ListText] PRIMARY KEY  CLUSTERED 
+	(
+		[Work_ListTextID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

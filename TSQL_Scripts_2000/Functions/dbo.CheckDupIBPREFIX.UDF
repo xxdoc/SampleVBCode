@@ -1,0 +1,49 @@
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[CheckDupIBPREFIX]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[CheckDupIBPREFIX]
+GO
+
+CREATE FUNCTION [dbo].[CheckDupIBPREFIX] (@psIBPrefix varchar(5), @piUsersID int)
+RETURNS int
+AS  
+BEGIN
+	---12.17.2003
+	DECLARE @sIBPrefix As varchar(5)
+	DECLARE @iUsersID As int
+	DECLARE @iUsersIDCount As int
+	DECLARE @iCountOFUsersID as int
+    	DECLARE CurRS Cursor for
+		SELECT Count(AUS.UsersID) As CountOFUsersID
+		FROM	AdjusterUsersSoftware AUS
+		WHERE 	UPPER(AUS.IBPrefix) = @psIBPrefix
+		AND 	AUS.USERSID <> @piUsersID
+
+	SET @sIBPrefix = UPPER(@psIBPrefix)
+	SET @iUsersID = @piUsersID
+	
+	Open CurRS
+	Fetch Next From CurRS into	@iCountOFUsersID 
+	While @@FEtch_Status = 0
+	BEGIN
+		SET @iUsersIDCount = @iCountOFUsersID
+		Fetch Next From CurRS into	@iCountOFUsersID
+	END
+	Close CurRS
+	Deallocate CurRS
+
+	return(@iUsersIDCount)
+END
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+GRANT  EXECUTE  ON [dbo].[CheckDupIBPREFIX]  TO [CFUSER]
+GO
+

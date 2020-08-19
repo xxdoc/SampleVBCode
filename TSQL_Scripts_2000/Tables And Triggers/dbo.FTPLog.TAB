@@ -1,0 +1,31 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[FTPLog]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[FTPLog]
+GO
+
+CREATE TABLE [dbo].[FTPLog] (
+	[FTPLogID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClientHost] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[username] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LogTime] [datetime] NOT NULL ,
+	[service] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[machine] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[serverip] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[processingtime] [int] NOT NULL ,
+	[bytesrecvd] [int] NOT NULL ,
+	[bytessent] [int] NOT NULL ,
+	[servicestatus] [int] NOT NULL ,
+	[win32status] [int] NOT NULL ,
+	[operation] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[target] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[parameters] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	CONSTRAINT [PK_FTPLog] PRIMARY KEY  CLUSTERED 
+	(
+		[FTPLogID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY]
+GO
+
+ CREATE  INDEX [IX_FTPLog_LogTime] ON [dbo].[FTPLog]([LogTime]) WITH  FILLFACTOR = 90 ON [PRIMARY]
+GO
+
+

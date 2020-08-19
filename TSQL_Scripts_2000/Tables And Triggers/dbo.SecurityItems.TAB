@@ -1,0 +1,25 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SecurityItems]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SecurityItems]
+GO
+
+CREATE TABLE [dbo].[SecurityItems] (
+	[SecurityItemsID] [int] IDENTITY (1, 1) NOT NULL ,
+	[SecurityItemTypeID] [int] NULL ,
+	[ItemName] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ItemDescription] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NULL ,
+	[UpdateByUserID] [int] NULL ,
+	CONSTRAINT [PK_SecurityItems] PRIMARY KEY  CLUSTERED 
+	(
+		[SecurityItemsID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_SecurityItems_SecurityItemType] FOREIGN KEY 
+	(
+		[SecurityItemTypeID]
+	) REFERENCES [dbo].[SecurityItemType] (
+		[SecurityItemTypeID]
+	)
+) ON [PRIMARY]
+GO
+
+

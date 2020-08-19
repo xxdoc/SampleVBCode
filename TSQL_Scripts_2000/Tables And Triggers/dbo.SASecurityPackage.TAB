@@ -1,0 +1,28 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SASecurityPackage]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SASecurityPackage]
+GO
+
+CREATE TABLE [dbo].[SASecurityPackage] (
+	[SecurityAreaID] [int] NOT NULL ,
+	[SecurityPackageID] [int] NOT NULL ,
+	CONSTRAINT [PK_SASecirityPackage] PRIMARY KEY  CLUSTERED 
+	(
+		[SecurityAreaID],
+		[SecurityPackageID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_SASecirityPackage_SecurityArea1] FOREIGN KEY 
+	(
+		[SecurityAreaID]
+	) REFERENCES [dbo].[SecurityArea] (
+		[SecurityAreaID]
+	),
+	CONSTRAINT [FK_SASecirityPackage_SecurityPackage] FOREIGN KEY 
+	(
+		[SecurityPackageID]
+	) REFERENCES [dbo].[SecurityPackage] (
+		[SecurityPackageID]
+	)
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,29 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[ClassOfLossHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[ClassOfLossHistory]
+GO
+
+CREATE TABLE [dbo].[ClassOfLossHistory] (
+	[ClassOfLossHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClassOfLossID] [int] NOT NULL ,
+	[ClientCompanyID] [int] NOT NULL ,
+	[ClassTypeID] [int] NOT NULL ,
+	[IsSubSetOFClassOfLossID] [int] NULL ,
+	[Code] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_ClassOfLossHistory_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_ClassOfLossHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[ClassOfLossHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_ClassOfLossHistory_ClassOfLoss1] FOREIGN KEY 
+	(
+		[ClassOfLossID]
+	) REFERENCES [dbo].[ClassOfLoss] (
+		[ClassOfLossID]
+	)
+) ON [PRIMARY]
+GO
+
+

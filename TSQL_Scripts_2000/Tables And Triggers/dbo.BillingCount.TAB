@@ -1,0 +1,35 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[BillingCount]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[BillingCount]
+GO
+
+CREATE TABLE [dbo].[BillingCount] (
+	[BillingCountID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[Rebill] [int] NOT NULL CONSTRAINT [DF_BillingCount_Rebill] DEFAULT (0),
+	[Supplement] [int] NOT NULL CONSTRAINT [DF_BillingCount_Supplement] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_BillingCount_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_BillingCount_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_BillingCount] PRIMARY KEY  CLUSTERED 
+	(
+		[BillingCountID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_AssignmentID_Supplement] UNIQUE  NONCLUSTERED 
+	(
+		[AssignmentsID],
+		[Supplement]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_BillingCount_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	)
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,42 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[UsersHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[UsersHistory]
+GO
+
+CREATE TABLE [dbo].[UsersHistory] (
+	[UsersHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[UsersID] [int] NOT NULL ,
+	[UserName] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PassWord] [varchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FirstName] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[LastName] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SSN] [int] NULL ,
+	[Email] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ContactPhone] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmergencyPhone] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Address] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[City] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[State] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Zip] [int] NULL ,
+	[ZIP4] [int] NULL ,
+	[OtherPostCode] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Active] [bit] NULL ,
+	[ActiveDate] [datetime] NULL ,
+	[InactiveDate] [datetime] NULL ,
+	[SecurityLevel] [int] NOT NULL ,
+	[Comments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_UsersHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[UsersHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_UsersHistory_Users] FOREIGN KEY 
+	(
+		[UsersID]
+	) REFERENCES [dbo].[Users] (
+		[UsersID]
+	)
+) ON [PRIMARY]
+GO
+
+

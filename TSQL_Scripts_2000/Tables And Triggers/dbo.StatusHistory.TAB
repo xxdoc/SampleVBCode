@@ -1,0 +1,28 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[StatusHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[StatusHistory]
+GO
+
+CREATE TABLE [dbo].[StatusHistory] (
+	[StatusHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[StatusID] [int] NOT NULL ,
+	[StatusAlias] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_StatusHistory_StatusAlias] DEFAULT (''),
+	[Status] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Description] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_StatusHistory_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NULL ,
+	CONSTRAINT [PK_StatusHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[StatusHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_StatusHistory_Status] FOREIGN KEY 
+	(
+		[StatusID]
+	) REFERENCES [dbo].[Status] (
+		[StatusID]
+	)
+) ON [PRIMARY]
+GO
+
+

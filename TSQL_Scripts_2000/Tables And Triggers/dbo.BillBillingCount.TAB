@@ -1,0 +1,26 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[BillBillingCount]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[BillBillingCount]
+GO
+
+CREATE TABLE [dbo].[BillBillingCount] (
+	[BillBillingCountID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[BillAssignmentID] [int] NOT NULL ,
+	[Rebill] [int] NOT NULL CONSTRAINT [DF_BillBillingCount_Rebill] DEFAULT (0),
+	[Supplement] [int] NOT NULL CONSTRAINT [DF_BillBillingCount_Supplement] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_BillBillingCount] PRIMARY KEY  CLUSTERED 
+	(
+		[BillBillingCountID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_BillBillingCount_BillAssignment] FOREIGN KEY 
+	(
+		[BillAssignmentID]
+	) REFERENCES [dbo].[BillAssignment] (
+		[BillAssignmentID]
+	)
+) ON [PRIMARY]
+GO
+
+

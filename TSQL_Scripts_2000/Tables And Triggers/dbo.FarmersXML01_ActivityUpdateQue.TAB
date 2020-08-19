@@ -1,0 +1,38 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[FarmersXML01_ActivityUpdateQue]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[FarmersXML01_ActivityUpdateQue]
+GO
+
+CREATE TABLE [dbo].[FarmersXML01_ActivityUpdateQue] (
+	[FarmersXML01_ActivityUpdateQueID] [int] IDENTITY (1, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[UnitId] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ClaimId] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Type] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_ActivityUpdateQue_Description] DEFAULT (''),
+	[Comment] [varchar] (1500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_ActivityUpdateQue_Comment] DEFAULT (''),
+	[CreatedBy] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[CompletedDate] [datetime] NULL ,
+	[GMTCreated] [datetime] NULL ,
+	[CRNAccepted] [bit] NOT NULL CONSTRAINT [DF_FarmersXML01_ActivityUpdateQue_CRNAccepted] DEFAULT (0),
+	[CRNAcceptedDate] [datetime] NULL ,
+	[CRNRejected] [bit] NOT NULL CONSTRAINT [DF_FarmersXML01_ActivityUpdateQue_CRNRejected] DEFAULT (0),
+	[CRNRejectedDate] [datetime] NULL ,
+	[CRNRejectedReason] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FarmersXML01_ActivityUpdateQue_CRNRejectedReason] DEFAULT (''),
+	[SendToCRN] [bit] NOT NULL CONSTRAINT [DF_FarmersXML01_ActivityUpdateQue_SendToCRN] DEFAULT (0),
+	[SentToCRNDate] [datetime] NULL ,
+	[DateLastUpdated] [datetime] NOT NULL CONSTRAINT [DF_FarmersXML01_ActivityUpdateQue_DateLastUpdated] DEFAULT (getdate()),
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_FarmersXML01_ActivityUpdateQue] PRIMARY KEY  CLUSTERED 
+	(
+		[FarmersXML01_ActivityUpdateQueID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_FarmersXML01_ActivityUpdateQue_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

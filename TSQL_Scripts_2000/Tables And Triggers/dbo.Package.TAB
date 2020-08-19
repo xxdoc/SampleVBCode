@@ -1,0 +1,37 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[Package]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[Package]
+GO
+
+CREATE TABLE [dbo].[Package] (
+	[PackageID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[CreateDate] [datetime] NOT NULL ,
+	[PackageStatus] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Package_PackageStatus] DEFAULT (''),
+	[Name] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Number] [int] NOT NULL CONSTRAINT [DF_Package_Number] DEFAULT (1),
+	[SendMe] [bit] NOT NULL CONSTRAINT [DF_Package_SendMe] DEFAULT (0),
+	[SentDate] [datetime] NULL ,
+	[SentToEmail] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_Package_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_Package_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_Package_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_Package] PRIMARY KEY  CLUSTERED 
+	(
+		[PackageID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_Package_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	)
+) ON [PRIMARY]
+GO
+
+

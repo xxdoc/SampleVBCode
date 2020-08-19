@@ -1,0 +1,24 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[AssignmentType]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[AssignmentType]
+GO
+
+CREATE TABLE [dbo].[AssignmentType] (
+	[AssignmentTypeID] [int] IDENTITY (1, 1) NOT NULL ,
+	[Type] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AssignmentType_Description] DEFAULT (''),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AssignmentType_AdminComments] DEFAULT (''),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_AssignmentType_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_AssignmentType] PRIMARY KEY  CLUSTERED 
+	(
+		[AssignmentTypeID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_AssignmentType] UNIQUE  NONCLUSTERED 
+	(
+		[Type]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY]
+GO
+
+

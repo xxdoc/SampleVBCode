@@ -1,0 +1,53 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[CompanyHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[CompanyHistory]
+GO
+
+CREATE TABLE [dbo].[CompanyHistory] (
+	[CompanyHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[CompanyID] [int] NOT NULL ,
+	[Name] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[DBName] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_CompanyHistory_DBName] DEFAULT (''),
+	[Code] [varchar] (3) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[CarrierPrefix] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_CompanyHistory_CarrierPrefix] DEFAULT (''),
+	[Comments] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[IsClientOf] [int] NULL ,
+	[EnableSingleFile] [bit] NOT NULL CONSTRAINT [DF_CompanyHistory_EnableSingleFile] DEFAULT (0),
+	[SingleFileEmail] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PDFJpegQuality] [int] NOT NULL CONSTRAINT [DF_CompanyHistory_PDFJpegQuality] DEFAULT (100),
+	[Active] [bit] NOT NULL CONSTRAINT [DF_CompanyHistory_Active] DEFAULT (1),
+	[LogoImageName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_CompanyHistory_LogoImageName] DEFAULT (''),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	[EnableSinglePDF] [bit] NULL ,
+	[SinglePDFEmail] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SinglePDFEmailCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SinglePDFEmailBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SingleFileEmailCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SingleFileEmailBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailDocsOnly] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailDocsOnlyCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailDocsOnlyBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailPhotosOnly] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailPhotosOnlyCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailPhotosOnlyBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FTPSingleFileUrl] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FTPSingleFileUserName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FTPSingleFilePassword] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[HttpPostSingleFileUrl] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[HttpPostSingleFileUserName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[HttpPostSingleFilePassword] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[B2BDir] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	CONSTRAINT [PK_CompanyHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[CompanyHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_CompanyHistory_Company] FOREIGN KEY 
+	(
+		[CompanyID]
+	) REFERENCES [dbo].[Company] (
+		[CompanyID]
+	)
+) ON [PRIMARY]
+GO
+
+

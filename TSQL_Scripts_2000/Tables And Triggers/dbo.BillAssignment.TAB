@@ -1,0 +1,75 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[BillAssignment]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[BillAssignment]
+GO
+
+CREATE TABLE [dbo].[BillAssignment] (
+	[BillAssignmentID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[AssignmentTypeID] [int] NOT NULL CONSTRAINT [DF_BillAssignment_AssignmentTypeID] DEFAULT (1),
+	[ClientCompanyCatSpecID] [int] NOT NULL ,
+	[AdjusterSpecID] [int] NOT NULL ,
+	[IBNUM] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[CLIENTNUM] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[PolicyNo] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Insured] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossLoc1] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossLoc2] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossLocCity] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossLocState] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossLocZipcode] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossDate] [datetime] NOT NULL ,
+	[CloseDate] [datetime] NULL ,
+	[IsLocked] [bit] NOT NULL CONSTRAINT [DF_BillAssignment_IsLocked] DEFAULT (0),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_BillAssignment_IsDeleted] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[MiscDelimSettings] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_BillAssignment_MiscDelimSettings] DEFAULT (''),
+	[StatusID] [int] NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_BillAssignment] PRIMARY KEY  CLUSTERED 
+	(
+		[BillAssignmentID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_BillAssignment] UNIQUE  NONCLUSTERED 
+	(
+		[ClientCompanyCatSpecID],
+		[AdjusterSpecID],
+		[CLIENTNUM]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_BillAssignment_IBNUM] UNIQUE  NONCLUSTERED 
+	(
+		[IBNUM]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_BillAssignment_AssignmentType] FOREIGN KEY 
+	(
+		[AssignmentTypeID]
+	) REFERENCES [dbo].[AssignmentType] (
+		[AssignmentTypeID]
+	),
+	CONSTRAINT [FK_BillAssignment_ClientCoAdjusterSpec] FOREIGN KEY 
+	(
+		[AdjusterSpecID]
+	) REFERENCES [dbo].[ClientCoAdjusterSpec] (
+		[ClientCoAdjusterSpecID]
+	),
+	CONSTRAINT [FK_BillAssignment_ClientCompanyCatSpec] FOREIGN KEY 
+	(
+		[ClientCompanyCatSpecID]
+	) REFERENCES [dbo].[ClientCompanyCatSpec] (
+		[ClientCompanyCatSpecID]
+	),
+	CONSTRAINT [FK_BillAssignment_Status] FOREIGN KEY 
+	(
+		[StatusID]
+	) REFERENCES [dbo].[Status] (
+		[StatusID]
+	)
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ CREATE  INDEX [IX_BillAssignment_DateLastUpdated] ON [dbo].[BillAssignment]([DateLastUpdated], [CLIENTNUM], [IBNUM]) WITH  FILLFACTOR = 90 ON [PRIMARY]
+GO
+
+ CREATE  INDEX [IX_BillAssignment_1] ON [dbo].[BillAssignment]([BillAssignmentID]) WITH  FILLFACTOR = 90 ON [PRIMARY]
+GO
+
+

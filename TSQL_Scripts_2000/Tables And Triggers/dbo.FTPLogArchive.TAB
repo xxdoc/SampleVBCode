@@ -1,0 +1,32 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[FTPLogArchive]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[FTPLogArchive]
+GO
+
+CREATE TABLE [dbo].[FTPLogArchive] (
+	[FTPLogArchiveID] [int] IDENTITY (1, 1) NOT NULL ,
+	[FTPLogID] [int] NOT NULL ,
+	[ClientHost] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[username] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LogTime] [datetime] NOT NULL ,
+	[service] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[machine] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[serverip] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[processingtime] [int] NOT NULL ,
+	[bytesrecvd] [int] NOT NULL ,
+	[bytessent] [int] NOT NULL ,
+	[servicestatus] [int] NOT NULL ,
+	[win32status] [int] NOT NULL ,
+	[operation] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[target] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[parameters] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	CONSTRAINT [PK_FTPLogArchive] PRIMARY KEY  CLUSTERED 
+	(
+		[FTPLogArchiveID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY]
+GO
+
+ CREATE  INDEX [IX_FTPLogArchive] ON [dbo].[FTPLogArchive]([LogTime]) WITH  FILLFACTOR = 90 ON [PRIMARY]
+GO
+
+

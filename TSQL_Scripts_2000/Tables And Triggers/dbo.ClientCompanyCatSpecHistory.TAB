@@ -1,0 +1,30 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[ClientCompanyCatSpecHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[ClientCompanyCatSpecHistory]
+GO
+
+CREATE TABLE [dbo].[ClientCompanyCatSpecHistory] (
+	[ClientCompanyCatSpecHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClientCompanyCatSpecID] [int] NOT NULL ,
+	[ClientCompanyID] [int] NOT NULL ,
+	[CATID] [int] NOT NULL ,
+	[CatCode] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Comments] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ActiveDate] [datetime] NOT NULL CONSTRAINT [DF_CompanyCatSpecHistory_ActiveDate] DEFAULT (getdate()),
+	[InactiveDate] [datetime] NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	[AssignmentTypeID] [int] NOT NULL CONSTRAINT [DF_ClientCompanyCatSpecHistory_AssignmentTypeID] DEFAULT (1),
+	CONSTRAINT [PK_CompanyCatSpecHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[ClientCompanyCatSpecHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_CompanyCatSpecHistory_CompanyCatSpec] FOREIGN KEY 
+	(
+		[ClientCompanyCatSpecID]
+	) REFERENCES [dbo].[ClientCompanyCatSpec] (
+		[ClientCompanyCatSpecID]
+	)
+) ON [PRIMARY]
+GO
+
+

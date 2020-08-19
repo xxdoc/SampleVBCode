@@ -1,0 +1,37 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RegSettingHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RegSettingHistory]
+GO
+
+CREATE TABLE [dbo].[RegSettingHistory] (
+	[RegSettingID] [int] NOT NULL ,
+	[RegNameBase] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RegName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Version] [int] NOT NULL CONSTRAINT [DF_RegSettingHistory_Version] DEFAULT (1),
+	[SPVersionBase] [int] NULL ,
+	[SPVersion] [int] NULL ,
+	[VersionDate] [datetime] NOT NULL ,
+	[SectionLevel01] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RegSettingHistory_SectionLevel01] DEFAULT (''),
+	[SectionLevel02] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RegSettingHistory_SectionLevel02] DEFAULT (''),
+	[SectionLevel03] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RegSettingHistory_SectionLevel03] DEFAULT (''),
+	[SectionLevel04] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RegSettingHistory_SectionLevel04] DEFAULT (''),
+	[SectionLevel05] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RegSettingHistory_SectionLevel05] DEFAULT (''),
+	[SPName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_RegSettingHistory_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RegSettingHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[RegSettingID],
+		[Version]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RegSettingHistory_RegSetting] FOREIGN KEY 
+	(
+		[RegSettingID]
+	) REFERENCES [dbo].[RegSetting] (
+		[RegSettingID]
+	)
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,27 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[Manager]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[Manager]
+GO
+
+CREATE TABLE [dbo].[Manager] (
+	[CompanyID] [int] NOT NULL ,
+	[UsersID] [int] NOT NULL ,
+	[Active] [bit] NOT NULL CONSTRAINT [DF_Manager_Active] DEFAULT (1),
+	[DateLastUpdated] [datetime] NULL ,
+	[UpdateByUserID] [int] NULL ,
+	CONSTRAINT [PK_CompanyManagerUsers] PRIMARY KEY  CLUSTERED 
+	(
+		[CompanyID],
+		[UsersID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_CompanyManagerUsers_CompanyUsers] FOREIGN KEY 
+	(
+		[CompanyID],
+		[UsersID]
+	) REFERENCES [dbo].[CompanyUsers] (
+		[CompanyID],
+		[UsersID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

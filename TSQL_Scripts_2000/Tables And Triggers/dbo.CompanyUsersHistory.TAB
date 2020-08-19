@@ -1,0 +1,33 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[CompanyUsersHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[CompanyUsersHistory]
+GO
+
+CREATE TABLE [dbo].[CompanyUsersHistory] (
+	[CompanyUsersHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[CompanyID] [int] NOT NULL ,
+	[UsersID] [int] NOT NULL ,
+	[Active] [bit] NOT NULL CONSTRAINT [DF_CompanyUsersHistory_Active] DEFAULT (1),
+	[ActiveDate] [datetime] NOT NULL ,
+	[InactiveDate] [datetime] NULL ,
+	[SecurityLevel] [int] NOT NULL CONSTRAINT [DF_CompanyUsersHistory_SecurityLevel] DEFAULT (1),
+	[Comments] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Flag] [bit] NOT NULL CONSTRAINT [DF_CompanyUsersHistory_Flag] DEFAULT (0),
+	[AssignmentTypeIDList] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_CompanyUsersHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[CompanyUsersHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_CompanyUsersHistory_CompanyUsers] FOREIGN KEY 
+	(
+		[CompanyID],
+		[UsersID]
+	) REFERENCES [dbo].[CompanyUsers] (
+		[CompanyID],
+		[UsersID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

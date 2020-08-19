@@ -1,0 +1,26 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[AdjusterUsersSoftware]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[AdjusterUsersSoftware]
+GO
+
+CREATE TABLE [dbo].[AdjusterUsersSoftware] (
+	[UsersID] [int] NOT NULL ,
+	[VersionInfo] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[LicenseDaysLeft] [smallint] NULL CONSTRAINT [DF_UsersSoftware_LicenseDaysLeft] DEFAULT (0),
+	[ResetLicense] [bit] NULL CONSTRAINT [DF_UsersSoftware_ResetLicense] DEFAULT (0),
+	[IBPrefix] [varchar] (5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AdjusterUsersSoftware_IBPrefix] DEFAULT ('AA'),
+	[ResetIBPrefix] [bit] NULL CONSTRAINT [DF_UsersSoftware_ResetIBPrefix] DEFAULT (0),
+	[SingleFileSendAuthority] [bit] NOT NULL CONSTRAINT [DF_AdjusterUsersSoftware_SingleFileSendAuthority] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_UsersSoftware] PRIMARY KEY  CLUSTERED 
+	(
+		[UsersID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_AdjusterUsersSoftware] UNIQUE  NONCLUSTERED 
+	(
+		[IBPrefix]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

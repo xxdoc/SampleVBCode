@@ -1,0 +1,66 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[PackageItem]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[PackageItem]
+GO
+
+CREATE TABLE [dbo].[PackageItem] (
+	[PackageItemID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[PackageID] [int] NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[IDPackage] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[ReportFormat] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_PackageItem_ReportFormat] DEFAULT (''),
+	[RTAttachmentsID] [int] NULL ,
+	[IDRTAttachments] [int] NULL ,
+	[Number] [int] NULL ,
+	[AttachmentName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_PackageItem_AttachmentName] DEFAULT (''),
+	[SortOrder] [int] NOT NULL ,
+	[Name] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[IsCoApprove] [bit] NOT NULL CONSTRAINT [DF_PackageItem_IsCoApprove] DEFAULT (0),
+	[CoApproveDate] [datetime] NULL ,
+	[CoApproveDesc] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageItem_CoApproveDesc] DEFAULT (''),
+	[IsClientCoReject] [bit] NOT NULL CONSTRAINT [DF_PackageItem_IsClientCoReject] DEFAULT (0),
+	[ClientCoRejectDate] [datetime] NULL ,
+	[ClientCoRejectDesc] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageItem_ClientCoRejectDesc] DEFAULT (''),
+	[IsClientCoDelete] [bit] NOT NULL CONSTRAINT [DF_PackageItem_IsClientCoDelete] DEFAULT (0),
+	[ClientCoDeleteDate] [datetime] NULL ,
+	[ClientCoDeleteDesc] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageItem_ClientCoDeleteDesc] DEFAULT (''),
+	[IsClientCoApprove] [bit] NOT NULL CONSTRAINT [DF_PackageItem_IsClientCoApprove] DEFAULT (0),
+	[ClientCoApproveDate] [datetime] NULL ,
+	[ClientCoApproveDesc] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageItem_ClientCoApproveDesc] DEFAULT (''),
+	[PackageItemGUID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageItem_PackageItemGUID] DEFAULT (newid()),
+	[SendMe] [bit] NOT NULL CONSTRAINT [DF_PackageItem_SendMe] DEFAULT (0),
+	[SentDate] [datetime] NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_PackageItem_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_PackageItem_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_PackageItem_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_PackageItem] PRIMARY KEY  CLUSTERED 
+	(
+		[PackageItemID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_PackageItem_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	),
+	CONSTRAINT [FK_PackageItem_Package] FOREIGN KEY 
+	(
+		[PackageID]
+	) REFERENCES [dbo].[Package] (
+		[PackageID]
+	),
+	CONSTRAINT [FK_PackageItem_RTAttachments] FOREIGN KEY 
+	(
+		[RTAttachmentsID]
+	) REFERENCES [dbo].[RTAttachments] (
+		[RTAttachmentsID]
+	)
+) ON [PRIMARY]
+GO
+
+

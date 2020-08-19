@@ -1,0 +1,41 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[Application]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[Application]
+GO
+
+CREATE TABLE [dbo].[Application] (
+	[ApplicationID] [int] IDENTITY (1, 1) NOT NULL ,
+	[AppNameBase] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[AppName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Version] [int] NOT NULL CONSTRAINT [DF_Application_Version] DEFAULT (1),
+	[MajorVS] [int] NOT NULL ,
+	[MinorVS] [int] NOT NULL ,
+	[RevisionVS] [int] NOT NULL ,
+	[SPVersionBase] [int] NOT NULL ,
+	[SPVersion] [int] NOT NULL ,
+	[VersionDate] [datetime] NOT NULL ,
+	[ProjectName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ClassName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SectionLevel01] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Application_SectionLevel01] DEFAULT (''),
+	[SectionLevel02] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Application_SectionLevel02] DEFAULT (''),
+	[SectionLevel03] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Application_SectionLevel03] DEFAULT (''),
+	[SectionLevel04] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Application_SectionLevel04] DEFAULT (''),
+	[SectionLevel05] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Application_SectionLevel05] DEFAULT (''),
+	[InstallFileLocation] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[SPName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[SELF_REG] [bit] NOT NULL CONSTRAINT [DF_Application_SELF_REG] DEFAULT (1),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_Application_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	CONSTRAINT [PK_Application] PRIMARY KEY  CLUSTERED 
+	(
+		[ApplicationID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_Application] UNIQUE  NONCLUSTERED 
+	(
+		[AppName]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY]
+GO
+
+

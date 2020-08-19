@@ -1,0 +1,32 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[PackageEmailQueue]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[PackageEmailQueue]
+GO
+
+CREATE TABLE [dbo].[PackageEmailQueue] (
+	[PackageEmailQueueID] [int] IDENTITY (1, 1) NOT NULL ,
+	[PackageID] [int] NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[PackageStatus] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageEmailQueue_PackageStatus] DEFAULT (''),
+	[EmailTo] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageEmailQueue_EmailTo] DEFAULT (''),
+	[EmailCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageEmailQueue_EmailCC] DEFAULT (''),
+	[EmailBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageEmailQueue_EmailBCC] DEFAULT (''),
+	[EmailSubject] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageEmailQueue_EmailSubject] DEFAULT (''),
+	[EmailMess] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageEmailQueue_EmailMess] DEFAULT (''),
+	[PackageItemIDList] [varchar] (8000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PackageEmailQueue_PackageItemIDList] DEFAULT (''),
+	[DateLastUpdated] [datetime] NOT NULL CONSTRAINT [DF_PackageEmailQueue_DateLastUpdated] DEFAULT (getdate()),
+	[UpdateByUserID] [int] NOT NULL ,
+	[DateDontSendUntil] [datetime] NOT NULL CONSTRAINT [DF_PackageEmailQueue_DateDontSendUntil] DEFAULT (getdate()),
+	CONSTRAINT [PK_PackageEmailQueue] PRIMARY KEY  CLUSTERED 
+	(
+		[PackageEmailQueueID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_PackageEmailQueue_Package] FOREIGN KEY 
+	(
+		[PackageID]
+	) REFERENCES [dbo].[Package] (
+		[PackageID]
+	)
+) ON [PRIMARY]
+GO
+
+

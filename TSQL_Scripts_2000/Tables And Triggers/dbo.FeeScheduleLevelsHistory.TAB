@@ -1,0 +1,29 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[FeeScheduleLevelsHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[FeeScheduleLevelsHistory]
+GO
+
+CREATE TABLE [dbo].[FeeScheduleLevelsHistory] (
+	[FeeScheduleLevelsHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[FeeScheduleLevelsID] [int] NOT NULL ,
+	[FeeScheduleID] [int] NOT NULL ,
+	[LevelNum] [int] NULL ,
+	[LevelMax] [money] NOT NULL ,
+	[LevelPctApp] [decimal](18, 4) NOT NULL ,
+	[LevelMin] [money] NOT NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_FeeScheduleLevelsHistory_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_FeeScheduleLevelsHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[FeeScheduleLevelsHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_FeeScheduleLevelsHistory_FeeScheduleLevels] FOREIGN KEY 
+	(
+		[FeeScheduleLevelsID]
+	) REFERENCES [dbo].[FeeScheduleLevels] (
+		[FeeScheduleLevelsID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

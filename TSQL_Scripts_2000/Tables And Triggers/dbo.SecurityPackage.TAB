@@ -1,0 +1,18 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SecurityPackage]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SecurityPackage]
+GO
+
+CREATE TABLE [dbo].[SecurityPackage] (
+	[SecurityPackageID] [int] IDENTITY (1, 1) NOT NULL ,
+	[PackageName] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Description] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NULL ,
+	[UpdateByUserID] [int] NULL ,
+	CONSTRAINT [PK_SecurityPackage] PRIMARY KEY  CLUSTERED 
+	(
+		[SecurityPackageID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,44 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTIBFee]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTIBFee]
+GO
+
+CREATE TABLE [dbo].[RTIBFee] (
+	[RTIBFeeID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[FeeScheduleFeeTypesID] [int] NOT NULL ,
+	[NumberOfItems] [int] NOT NULL ,
+	[Amount] [money] NOT NULL CONSTRAINT [DF_RTIBFee_Amount] DEFAULT (0),
+	[Comment] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RTIBFee_Comment] DEFAULT (''),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTIBFee_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTIBFee_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTIBFee] PRIMARY KEY  CLUSTERED 
+	(
+		[RTIBFeeID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTIBFee_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	),
+	CONSTRAINT [FK_RTIBFee_FeeScheduleFeeTypes] FOREIGN KEY 
+	(
+		[FeeScheduleFeeTypesID]
+	) REFERENCES [dbo].[FeeScheduleFeeTypes] (
+		[FeeScheduleFeeTypesID]
+	),
+	CONSTRAINT [FK_RTIBFee_RTIB] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[RTIB] (
+		[AssignmentsID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

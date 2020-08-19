@@ -1,0 +1,38 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[FeeSchedule]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[FeeSchedule]
+GO
+
+CREATE TABLE [dbo].[FeeSchedule] (
+	[FeeScheduleID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClientCompanyID] [int] NOT NULL ,
+	[ScheduleName] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[NumOfLevels] [int] NULL CONSTRAINT [DF_FeeSchedule_NumOfLevels] DEFAULT (0),
+	[NumOfFeeTypes] [int] NULL CONSTRAINT [DF_FeeSchedule_NumOfFeeTypes] DEFAULT (0),
+	[FeeServiceHourlyRate] [money] NOT NULL CONSTRAINT [DF_FeeSchedule_Fee10] DEFAULT (0),
+	[TaxPercent] [decimal](18, 4) NOT NULL CONSTRAINT [DF_FeeSchedule_Fee11] DEFAULT (0),
+	[InitialOptions] [varchar] (3000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FeeSchedule_InitialOptions] DEFAULT (''),
+	[Options] [varchar] (3000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FeeSchedule_Options] DEFAULT (''),
+	[DefaultAppDedClassTypeIDOrder] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FeeSchedule_DefaultAppDedClassTypeIDOrder] DEFAULT ('1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26'),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_FeeSchedule_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_FeeSchedule] PRIMARY KEY  CLUSTERED 
+	(
+		[FeeScheduleID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_FeeSchedule] UNIQUE  NONCLUSTERED 
+	(
+		[ClientCompanyID],
+		[ScheduleName]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_FeeSchedule_Company] FOREIGN KEY 
+	(
+		[ClientCompanyID]
+	) REFERENCES [dbo].[Company] (
+		[CompanyID]
+	)
+) ON [PRIMARY]
+GO
+
+

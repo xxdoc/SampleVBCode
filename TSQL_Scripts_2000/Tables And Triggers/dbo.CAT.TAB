@@ -1,0 +1,37 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[CAT]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[CAT]
+GO
+
+CREATE TABLE [dbo].[CAT] (
+	[CATID] [int] IDENTITY (1, 1) NOT NULL ,
+	[CompanyID] [int] NOT NULL ,
+	[AssignmentTypeID] [int] NOT NULL ,
+	[Name] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_CAT_Description] DEFAULT (''),
+	[ActiveDate] [datetime] NULL ,
+	[InactiveDate] [datetime] NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_CAT] PRIMARY KEY  CLUSTERED 
+	(
+		[CATID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_CAT_AssignmentType] FOREIGN KEY 
+	(
+		[AssignmentTypeID]
+	) REFERENCES [dbo].[AssignmentType] (
+		[AssignmentTypeID]
+	),
+	CONSTRAINT [FK_CAT_Company] FOREIGN KEY 
+	(
+		[CompanyID]
+	) REFERENCES [dbo].[Company] (
+		[CompanyID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+ CREATE  INDEX [IX_CAT] ON [dbo].[CAT]([Name]) WITH  FILLFACTOR = 90 ON [PRIMARY]
+GO
+
+

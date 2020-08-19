@@ -1,0 +1,59 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[ClientCompanyCatHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[ClientCompanyCatHistory]
+GO
+
+CREATE TABLE [dbo].[ClientCompanyCatHistory] (
+	[ClientCompanyCatHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClientCompanyID] [int] NOT NULL ,
+	[CATID] [int] NOT NULL ,
+	[BillingCode] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[TypeOfLossID] [int] NULL ,
+	[FeeScheduleID] [int] NULL ,
+	[SiteAddress] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SACity] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SAState] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SAZip] [int] NULL ,
+	[SAZip4] [int] NULL ,
+	[SAOtherPostCode] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ActiveDate] [datetime] NULL ,
+	[InactiveDate] [datetime] NULL ,
+	[AssignByZipDefault] [bit] NOT NULL CONSTRAINT [DF_ClientCompanyCatHistory_AssignByZipDefault] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	[EnableSinglePDF] [bit] NULL ,
+	[SinglePDFEmail] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SinglePDFEmailCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SinglePDFEmailBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EnableSingleFile] [bit] NULL ,
+	[SingleFileEmail] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SingleFileEmailCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SingleFileEmailBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailDocsOnly] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailDocsOnlyCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailDocsOnlyBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailPhotosOnly] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailPhotosOnlyCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[EmailPhotosOnlyBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FTPSingleFileUrl] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FTPSingleFileUserName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FTPSingleFilePassword] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[HttpPostSingleFileUrl] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[HttpPostSingleFileUserName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[HttpPostSingleFilePassword] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[B2BDir] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	CONSTRAINT [PK_CompanyCatHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[ClientCompanyCatHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_CompanyCatHistory_CompanyCat] FOREIGN KEY 
+	(
+		[ClientCompanyID],
+		[CATID]
+	) REFERENCES [dbo].[ClientCompanyCat] (
+		[ClientCompanyID],
+		[CATID]
+	)
+) ON [PRIMARY]
+GO
+
+

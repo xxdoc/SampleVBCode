@@ -1,0 +1,64 @@
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[CleanFromOrToDateString]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[CleanFromOrToDateString]
+GO
+
+CREATE FUNCTION [dbo].[CleanFromOrToDateString]	(@pGetDate datetime, @MyStringDate varchar(50), @bIsFromDate bit)
+Returns varchar(50)
+--Need to Format the From And to dates to Start the From Date at Midnight
+--And End the To Date at 23:59:59.999
+AS  
+BEGIN 
+	DECLARE @RetStringDate varchar(50)
+	IF @bIsFromDate = 1
+	BEGIN
+		IF IsDate(@MyStringDate) = 0 
+		BEGIN
+			IF @MyStringDate <> '*'
+			BEGIN
+				SET @RetStringDate = Convert(datetime,dbo.FormatDate(@pGetDate,'mm/dd/yyy'))
+			END
+			ELSE
+			BEGIN
+				SET @RetStringDate ='*'
+			END
+		END
+		ELSE
+		BEGIN
+			SET @RetStringDate = Convert(datetime,dbo.FormatDate(@MyStringDate,'mm/dd/yyy'))
+		END
+	END
+	ELSE
+	BEGIN
+		IF IsDate(@MyStringDate) = 0
+		BEGIN
+			IF @MyStringDate <> '*'
+			BEGIN
+				SET @RetStringDate = @pGetDate
+			END
+			ELSE
+			BEGIN
+				SET @RetStringDate ='*'
+			END
+		END
+		ELSE
+		BEGIN
+			SET @RetStringDate = Convert(datetime,dbo.FormatDate(@MyStringDate,'mm/dd/yyy')) + ' 23:59:59'
+		END
+	END
+	RETURN(@RetStringDate)
+END
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+GRANT  EXECUTE  ON [dbo].[CleanFromOrToDateString]  TO [CFUSER]
+GO
+

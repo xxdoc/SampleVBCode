@@ -1,0 +1,82 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[AssignmentsHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[AssignmentsHistory]
+GO
+
+CREATE TABLE [dbo].[AssignmentsHistory] (
+	[AssignmentsHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[AssignmentTypeID] [int] NOT NULL CONSTRAINT [DF_AssignmentsHistory_AssignmentTypeID] DEFAULT (1),
+	[ClientCompanyCatSpecID] [int] NOT NULL ,
+	[AdjusterSpecID] [int] NOT NULL ,
+	[AdjusterSpecIDDisplay] [int] NULL ,
+	[SPVersion] [int] NULL ,
+	[IBNUM] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[CLIENTNUM] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[PolicyNo] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PolicyDescription] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Insured] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[MailingAddress] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[MAStreet] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[MACity] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[MAState] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[MAZIP] [int] NULL ,
+	[MAZIP4] [int] NULL ,
+	[MAOtherPostCode] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[HomePhone] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[BusinessPhone] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PropertyAddress] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PAStreet] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PACity] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PAState] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PAZIP] [int] NULL ,
+	[PAZIP4] [int] NULL ,
+	[PAOtherPostCode] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[MortgageeName] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[AgentNo] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ReportedBy] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ReportedByPhone] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Deductible] [money] NULL ,
+	[AppDedClassTypeIDOrder] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[LRFormat] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[LossReport] [ntext] COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[LRPrintedDate] [datetime] NULL ,
+	[DownLoadLossReport] [bit] NOT NULL CONSTRAINT [DF_AssignmentsHistory_DownLoadLossReport] DEFAULT (0),
+	[UploadLossReport] [bit] NOT NULL CONSTRAINT [DF_AssignmentsHistory_UploadLossReport] DEFAULT (0),
+	[StatusID] [int] NOT NULL ,
+	[TypeOfLossID] [int] NULL ,
+	[XactTypeOfLoss] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SentToXact] [bit] NOT NULL CONSTRAINT [DF_AssignmentsHistory_SentToXact] DEFAULT (0),
+	[LossDate] [datetime] NULL ,
+	[AssignedDate] [datetime] NULL ,
+	[ReceivedDate] [datetime] NULL ,
+	[ContactDate] [datetime] NULL ,
+	[InspectedDate] [datetime] NULL ,
+	[CloseDate] [datetime] NULL ,
+	[Reassigned] [bit] NULL ,
+	[DateReassigned] [datetime] NULL ,
+	[RAAdjusterSpecID] [int] NULL ,
+	[IsLocked] [bit] NOT NULL CONSTRAINT [DF_AssignmentsHistory_IsLocked] DEFAULT (0),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_AssignmentsHistory_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_AssignmentsHistory_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_AssignmentsHistory_UploadMe] DEFAULT (0),
+	[DownLoadAll] [bit] NOT NULL CONSTRAINT [DF_AssignmentsHistory_DownLoadAll] DEFAULT (0),
+	[UpLoadAll] [bit] NOT NULL CONSTRAINT [DF_AssignmentsHistory_UpLoadAll] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[MiscDelimSettings] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AssignmentsHistory_MiscDelimSettings] DEFAULT (''),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_AssignmentsHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[AssignmentsHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_AssignmentsHistory_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	)
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

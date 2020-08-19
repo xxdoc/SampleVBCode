@@ -1,0 +1,86 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTIB]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTIB]
+GO
+
+CREATE TABLE [dbo].[RTIB] (
+	[AssignmentsID] [int] NOT NULL ,
+	[BillingCountID] [int] NOT NULL ,
+	[IDAssignments] [int] NOT NULL ,
+	[IDBillingCount] [int] NOT NULL ,
+	[RT00_lSSN] [numeric](9, 0) NULL ,
+	[RT01_sSubToCarrier] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT02_sIBNumber] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT05_sLocation] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT05a_sState] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT06_dtDateClosed] [datetime] NULL ,
+	[RT07_sAdjusterName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT09_sSALN] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT09a_sPolicyNo] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_RTIB_RT09a_sPolicyNo] DEFAULT (''),
+	[RT10_sInsuredName] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT11_sLossLocation] [varchar] (254) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT12_dtDateOfLoss] [datetime] NULL ,
+	[RT13_cGrossLoss] [money] NULL ,
+	[RT14_cDepreciation] [money] NULL ,
+	[RT14a_sSupplement] [int] NOT NULL CONSTRAINT [DF_RTIB_RT14a_sSupplement] DEFAULT (0),
+	[RT14b_sRebilled] [int] NOT NULL CONSTRAINT [DF_RTIB_RT14b_sRebilled] DEFAULT (0),
+	[RT15_cDeductible] [money] NULL ,
+	[RT15a_cLessExcessLimits] [money] NULL ,
+	[RT15b_sExcessLimDesc] [varchar] (254) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT15c_cLessMiscellaneous] [money] NULL CONSTRAINT [DF_RTIB_RT15c_cLessMiscellaneous] DEFAULT (0),
+	[RT15d_cMiscellaneousDesc] [varchar] (254) COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_RTIB_RT15d_cMiscellaneousDesc] DEFAULT (''),
+	[RT16_cNetClaim] [money] NULL ,
+	[RT17_cServiceFee] [money] NULL ,
+	[RT17a_cMiscServiceFee] [money] NULL ,
+	[RT18_sServiceFeeComment] [varchar] (254) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT18a_sMiscServiceFeeComment] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT25_cServiceFeeSubTotal] [money] NULL ,
+	[RT29a_sMiscExpenseFeeComment] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT29b_cMiscExpenseFee] [money] NULL ,
+	[RT30_cTotalExpenses] [money] NULL ,
+	[RT31_dTaxPercent] [numeric](8, 3) NULL ,
+	[RT32_cTaxAmount] [money] NULL ,
+	[RT33_cTotalAdjustingFee] [money] NULL ,
+	[RT33a_sAccountCode] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[FeeScheduleID] [int] NULL ,
+	[Void] [bit] NOT NULL CONSTRAINT [DF_RTIB_Void] DEFAULT (0),
+	[FeeByTime] [bit] NOT NULL CONSTRAINT [DF_RTIB_FeeByTime] DEFAULT (0),
+	[UseActivityTime] [bit] NOT NULL CONSTRAINT [DF_RTIB_UseActivityTime] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTIB_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTIB_UploadMe] DEFAULT (0),
+	[Comments] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_RTIB_Comments] DEFAULT (''),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTIB] PRIMARY KEY  CLUSTERED 
+	(
+		[AssignmentsID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_RTIB_AssignmentsID] UNIQUE  NONCLUSTERED 
+	(
+		[AssignmentsID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_RTIB_BillingCountID] UNIQUE  NONCLUSTERED 
+	(
+		[BillingCountID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_RTIB_ibnumber] UNIQUE  NONCLUSTERED 
+	(
+		[RT02_sIBNumber],
+		[AssignmentsID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTIB_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	),
+	CONSTRAINT [FK_RTIB_BillingCount] FOREIGN KEY 
+	(
+		[BillingCountID]
+	) REFERENCES [dbo].[BillingCount] (
+		[BillingCountID]
+	)
+) ON [PRIMARY]
+GO
+
+

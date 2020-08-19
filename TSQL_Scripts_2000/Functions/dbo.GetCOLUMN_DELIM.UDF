@@ -1,0 +1,37 @@
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[GetCOLUMN_DELIM]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[GetCOLUMN_DELIM]
+GO
+
+/******************************************************************
+*
+*    	Description:	GetColumn Delim Char
+*			Default Column Delim is 'Þ' Asc Code 222		
+*	
+*	Author: 	Brad Skidmore
+*	Date: 		4/7/2004
+*
+******************************************************************/
+
+CREATE FUNCTION dbo.GetCOLUMN_DELIM()
+RETURNS varchar(1)
+AS
+BEGIN
+	DECLARE @COLUMN_DELIM varchar(1)
+	SET @COLUMN_DELIM = CHAR(222)
+	RETURN(@COLUMN_DELIM)
+END
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+GRANT  EXECUTE  ON [dbo].[GetCOLUMN_DELIM]  TO [CFUSER]
+GO
+

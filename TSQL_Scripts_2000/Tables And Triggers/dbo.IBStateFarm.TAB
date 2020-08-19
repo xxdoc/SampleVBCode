@@ -1,0 +1,86 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[IBStateFarm]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[IBStateFarm]
+GO
+
+CREATE TABLE [dbo].[IBStateFarm] (
+	[IBStateFarmID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[BillAssignmentID] [int] NOT NULL ,
+	[BillBillingCountID] [int] NOT NULL ,
+	[lssn] [numeric](9, 0) NOT NULL ,
+	[IBNumber] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[PolicyNo] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Insured] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossLoc1] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossLoc2] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossLocCity] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossLocState] [varchar] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossLocZipcode] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[LossDate] [datetime] NULL ,
+	[CloseDate] [datetime] NULL ,
+	[GrossLoss] [money] NOT NULL ,
+	[Supplement] [int] NOT NULL CONSTRAINT [DF_IBStateFarm_Supplement] DEFAULT (0),
+	[SupplementExplain] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[AdditionalLoss] [money] NOT NULL ,
+	[Rebilled] [int] NOT NULL CONSTRAINT [DF_IBStateFarm_Rebilled] DEFAULT (0),
+	[OrigIBIBNumber] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[OrigIBTotalFee] [money] NOT NULL ,
+	[RebillExplain] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[MultiClaimBldgUnitNum] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ClientCompanyCatSpecID] [int] NOT NULL ,
+	[SeverityCode] [int] NOT NULL CONSTRAINT [DF__StateFarm__Sever__2DDFDDD3] DEFAULT (1),
+	[ServiceFeeBase] [money] NOT NULL ,
+	[ServiceFeeCovAExterior] [money] NOT NULL ,
+	[ServiceFeeCovAFraming] [money] NOT NULL ,
+	[ServiceFeeCovAInterior] [money] NOT NULL ,
+	[ServiceFeeCovB] [money] NOT NULL ,
+	[ServiceFeeALE] [money] NOT NULL ,
+	[OutBuildCount] [int] NOT NULL CONSTRAINT [DF__StateFarm__OutBu__2ED4020C] DEFAULT (0),
+	[OutBuildPerItemCharge] [money] NOT NULL ,
+	[ServiceFeeOutBuildings] [money] NOT NULL ,
+	[ServiceFeeSteepCharge] [money] NOT NULL ,
+	[ServiceFeeTwoStory] [money] NOT NULL ,
+	[ServiceFeeMoreThan50Squares] [money] NOT NULL ,
+	[ServiceFeeWoodSlateTileConRoof] [money] NOT NULL ,
+	[ServiceFeeAdditionalDamage] [money] NOT NULL ,
+	[ServiceFeeRopeAndHarness] [money] NOT NULL ,
+	[ServiceFeeMisc] [money] NOT NULL ,
+	[MiscFeesExplain] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ServiceFeeTotal] [money] NOT NULL ,
+	[ExpensePagerPhoneExplain] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ExpensePagerPhone] [money] NOT NULL ,
+	[ExpenseOtherExplain] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ExpenseOther] [money] NOT NULL ,
+	[SumTotalServiceFeeAndExpense] [money] NOT NULL ,
+	[TaxPercent] [numeric](8, 3) NOT NULL ,
+	[TaxesTotal] [money] NOT NULL ,
+	[TotalFee] [money] NOT NULL ,
+	[Void] [bit] NOT NULL CONSTRAINT [DF_IBStateFarm_Void] DEFAULT (0),
+	[Comments] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_IBStateFarm_Comments] DEFAULT (''),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_IBStateFarm] PRIMARY KEY  CLUSTERED 
+	(
+		[IBStateFarmID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_IBStateFarm_IBNumber] UNIQUE  NONCLUSTERED 
+	(
+		[BillBillingCountID],
+		[IBNumber]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_IBStateFarm_BillAssignment] FOREIGN KEY 
+	(
+		[BillAssignmentID]
+	) REFERENCES [dbo].[BillAssignment] (
+		[BillAssignmentID]
+	),
+	CONSTRAINT [FK_IBStateFarm_BillBillingCount] FOREIGN KEY 
+	(
+		[BillBillingCountID]
+	) REFERENCES [dbo].[BillBillingCount] (
+		[BillBillingCountID]
+	)
+) ON [PRIMARY]
+GO
+
+

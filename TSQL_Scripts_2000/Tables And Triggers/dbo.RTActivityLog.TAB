@@ -1,0 +1,45 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTActivityLog]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTActivityLog]
+GO
+
+CREATE TABLE [dbo].[RTActivityLog] (
+	[RTActivityLogID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[BillingCountID] [int] NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[IDBillingCount] [int] NULL ,
+	[ServiceTime] [numeric](10, 2) NULL ,
+	[ActDate] [datetime] NULL ,
+	[ActText] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ActTime] [datetime] NULL ,
+	[PageBreakAfter] [bit] NOT NULL CONSTRAINT [DF_RTActivityLog_PageBreakAfter] DEFAULT (0),
+	[BlankPageAfter] [bit] NOT NULL CONSTRAINT [DF_RTActivityLog_BlankPageAfter] DEFAULT (0),
+	[BlankRowsAfter] [int] NOT NULL CONSTRAINT [DF_RTActivityLog_BlankRowsAfter] DEFAULT (0),
+	[IsMgrEntry] [bit] NOT NULL CONSTRAINT [DF_RTActivityLog_IsMgrEntry] DEFAULT (0),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_RTActivityLog_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTActivityLog_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTActivityLog_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTActivityLog] PRIMARY KEY  CLUSTERED 
+	(
+		[RTActivityLogID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTActivityLog_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	),
+	CONSTRAINT [FK_RTActivityLog_BillingCount] FOREIGN KEY 
+	(
+		[BillingCountID]
+	) REFERENCES [dbo].[BillingCount] (
+		[BillingCountID]
+	)
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

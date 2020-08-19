@@ -1,0 +1,61 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTChecks]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTChecks]
+GO
+
+CREATE TABLE [dbo].[RTChecks] (
+	[RTChecksID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[BillingCountID] [int] NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NOT NULL ,
+	[IDBillingCount] [int] NULL ,
+	[CheckNum] [int] NOT NULL ,
+	[RT42_ClassOfLossID] [int] NULL ,
+	[RT43_TypeOfLossID] [int] NULL ,
+	[RT50_sInsuredPayeeName] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT51_sPayeeNames] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT52_sAddress] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[RT53_cAmountOfCheck] [money] NULL ,
+	[AppliedDeductible] [money] NULL CONSTRAINT [DF_RTChecks_AppliedDeductible] DEFAULT (0),
+	[RT54_CompanyCatSpecID] [int] NOT NULL ,
+	[tempCHeckName] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PrintOnIB] [bit] NOT NULL CONSTRAINT [DF_RTChecks_PrintOnIB] DEFAULT (0),
+	[PrintedDate] [datetime] NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_RTChecks_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTChecks_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTChecks_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTChecks] PRIMARY KEY  CLUSTERED 
+	(
+		[RTChecksID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_RTChecks] UNIQUE  NONCLUSTERED 
+	(
+		[AssignmentsID],
+		[BillingCountID],
+		[CheckNum]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTChecks_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	),
+	CONSTRAINT [FK_RTChecks_BillingCount] FOREIGN KEY 
+	(
+		[BillingCountID]
+	) REFERENCES [dbo].[BillingCount] (
+		[BillingCountID]
+	),
+	CONSTRAINT [FK_RTChecks_TypeOfLoss] FOREIGN KEY 
+	(
+		[RT43_TypeOfLossID]
+	) REFERENCES [dbo].[TypeOfLoss] (
+		[TypeOfLossID]
+	)
+) ON [PRIMARY]
+GO
+
+

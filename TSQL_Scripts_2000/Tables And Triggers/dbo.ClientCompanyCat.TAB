@@ -1,0 +1,75 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[ClientCompanyCat]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[ClientCompanyCat]
+GO
+
+CREATE TABLE [dbo].[ClientCompanyCat] (
+	[ClientCompanyID] [int] NOT NULL ,
+	[CATID] [int] NOT NULL ,
+	[BillingCode] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[TypeOfLossID] [int] NULL ,
+	[FeeScheduleID] [int] NULL ,
+	[SiteAddress] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SACity] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SAState] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SAZip] [int] NULL ,
+	[SAZip4] [int] NULL ,
+	[SAOtherPostCode] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ActiveDate] [datetime] NULL ,
+	[InactiveDate] [datetime] NULL ,
+	[AssignByZipDefault] [bit] NOT NULL CONSTRAINT [DF_ClientCompanyCat_AssignByZipDefault] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	[EnableSinglePDF] [bit] NOT NULL CONSTRAINT [DF_ClientCompanyCat_EnableSinglePDF] DEFAULT (0),
+	[SinglePDFEmail] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_SinglePDFEmail] DEFAULT (''),
+	[SinglePDFEmailCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_SinglePDFEmailCC] DEFAULT (''),
+	[SinglePDFEmailBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_SinglePDFEmailBCC] DEFAULT (''),
+	[EnableSingleFile] [bit] NOT NULL CONSTRAINT [DF_ClientCompanyCat_EnableSingleFile] DEFAULT (0),
+	[SingleFileEmail] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_SingleFileEmail] DEFAULT (''),
+	[SingleFileEmailCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_SingleFileEmailCC] DEFAULT (''),
+	[SingleFileEmailBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_SingleFileEmailBCC] DEFAULT (''),
+	[EmailDocsOnly] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_EmailDocsOnly] DEFAULT (''),
+	[EmailDocsOnlyCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_EmailDocsOnlyCC] DEFAULT (''),
+	[EmailDocsOnlyBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_EmailDocsOnlyBCC] DEFAULT (''),
+	[EmailPhotosOnly] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_EmailPhotosOnly] DEFAULT (''),
+	[EmailPhotosOnlyCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_EmailPhotosOnlyCC] DEFAULT (''),
+	[EmailPhotosOnlyBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_EmailPhotosOnlyBCC] DEFAULT (''),
+	[FTPSingleFileUrl] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_FTPSingleFileUrl] DEFAULT (''),
+	[FTPSingleFileUserName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_FTPSingleFileUserName] DEFAULT (''),
+	[FTPSingleFilePassword] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_FTPSingleFilePassword] DEFAULT (''),
+	[HttpPostSingleFileUrl] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_HttpPostSingleFileUrl] DEFAULT (''),
+	[HttpPostSingleFileUserName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_HttpPostSingleFileUserName] DEFAULT (''),
+	[HttpPostSingleFilePassword] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_HttpPostSingleFilePassword] DEFAULT (''),
+	[B2BDir] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ClientCompanyCat_B2BDir] DEFAULT (''),
+	CONSTRAINT [PK_CompanyCat] PRIMARY KEY  CLUSTERED 
+	(
+		[ClientCompanyID],
+		[CATID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_CompanyCat_CAT] FOREIGN KEY 
+	(
+		[CATID]
+	) REFERENCES [dbo].[CAT] (
+		[CATID]
+	),
+	CONSTRAINT [FK_CompanyCat_Company1] FOREIGN KEY 
+	(
+		[ClientCompanyID]
+	) REFERENCES [dbo].[Company] (
+		[CompanyID]
+	) ON DELETE CASCADE ,
+	CONSTRAINT [FK_CompanyCat_FeeSchedule] FOREIGN KEY 
+	(
+		[FeeScheduleID]
+	) REFERENCES [dbo].[FeeSchedule] (
+		[FeeScheduleID]
+	) ON DELETE CASCADE ,
+	CONSTRAINT [FK_CompanyCat_TypeOfLoss] FOREIGN KEY 
+	(
+		[TypeOfLossID]
+	) REFERENCES [dbo].[TypeOfLoss] (
+		[TypeOfLossID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

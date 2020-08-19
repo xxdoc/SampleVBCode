@@ -1,0 +1,45 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MiscReportParam26]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[MiscReportParam26]
+GO
+
+CREATE TABLE [dbo].[MiscReportParam26] (
+	[MiscReportParamID] [int] IDENTITY (1, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[Number] [int] NULL ,
+	[ProjectName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ClassName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ParamName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ParamCaption] [varchar] (2000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ParamDataType] [int] NOT NULL ,
+	[ParamValue] [varchar] (2000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[SortMe] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_MiscReportParam26_SortMe] DEFAULT (''),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_MiscReportParam26_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_MiscReportParam26_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_MiscReportParam26_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_MiscReportParam26] PRIMARY KEY  CLUSTERED 
+	(
+		[MiscReportParamID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_MiscReportParam26_UniuqueParam] UNIQUE  NONCLUSTERED 
+	(
+		[AssignmentsID],
+		[Number],
+		[ProjectName],
+		[ClassName],
+		[ParamName]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_MiscReportParam26_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	)
+) ON [PRIMARY]
+GO
+
+

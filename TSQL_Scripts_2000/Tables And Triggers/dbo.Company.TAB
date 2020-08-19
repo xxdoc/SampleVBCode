@@ -1,0 +1,56 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[Company]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[Company]
+GO
+
+CREATE TABLE [dbo].[Company] (
+	[CompanyID] [int] IDENTITY (1, 1) NOT NULL ,
+	[Name] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[DBName] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_DBName] DEFAULT (''),
+	[Code] [varchar] (3) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[CarrierPrefix] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_CarrierPrefix] DEFAULT (''),
+	[Comments] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[IsClientOf] [int] NULL ,
+	[EnableSingleFile] [bit] NOT NULL CONSTRAINT [DF_Company_EnableSingleFile] DEFAULT (0),
+	[SingleFileEmail] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[PDFJpegQuality] [int] NOT NULL CONSTRAINT [DF_Company_PDFJpegQuality] DEFAULT (100),
+	[Active] [bit] NOT NULL CONSTRAINT [DF_Company_Active] DEFAULT (1),
+	[LogoImageName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_LogoImageName] DEFAULT (''),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	[EnableSinglePDF] [bit] NOT NULL CONSTRAINT [DF_Company_EnableSinglePDF] DEFAULT (0),
+	[SinglePDFEmail] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_SinglePDFEmail] DEFAULT (''),
+	[SinglePDFEmailCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_SinglePDFEmailCC] DEFAULT (''),
+	[SinglePDFEmailBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_SinglePDFEmailBCC] DEFAULT (''),
+	[SingleFileEmailCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_SingleFileEmailCC] DEFAULT (''),
+	[SingleFileEmailBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_SingleFileEmailBCC] DEFAULT (''),
+	[EmailDocsOnly] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_EmailDocsOnly] DEFAULT (''),
+	[EmailDocsOnlyCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_EmailDocsOnlyCC] DEFAULT (''),
+	[EmailDocsOnlyBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_EmailDocsOnlyBCC] DEFAULT (''),
+	[EmailPhotosOnly] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_EmailPhotosOnly] DEFAULT (''),
+	[EmailPhotosOnlyCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_EmailPhotosOnlyCC] DEFAULT (''),
+	[EmailPhotosOnlyBCC] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_EmailPhotosOnlyBCC] DEFAULT (''),
+	[FTPSingleFileUrl] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_FTPSingleFileUrl] DEFAULT (''),
+	[FTPSingleFileUserName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_FTPSingleFileUserName] DEFAULT (''),
+	[FTPSingleFilePassword] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_FTPSingleFilePassword] DEFAULT (''),
+	[HttpPostSingleFileUrl] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_HttpPostSingleFileUrl] DEFAULT (''),
+	[HttpPostSingleFileUserName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_HttpPostSingleFileUserName] DEFAULT (''),
+	[HttpPostSingleFilePassword] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_HttpPostSingleFilePassword] DEFAULT (''),
+	[B2BDir] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Company_B2BDir] DEFAULT (''),
+	CONSTRAINT [PK_Company] PRIMARY KEY  CLUSTERED 
+	(
+		[CompanyID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_Company] UNIQUE  NONCLUSTERED 
+	(
+		[Code]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_Company_Company] FOREIGN KEY 
+	(
+		[IsClientOf]
+	) REFERENCES [dbo].[Company] (
+		[CompanyID]
+	)
+) ON [PRIMARY]
+GO
+
+

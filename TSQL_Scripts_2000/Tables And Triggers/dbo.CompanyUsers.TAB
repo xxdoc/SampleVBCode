@@ -1,0 +1,43 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[CompanyUsers]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[CompanyUsers]
+GO
+
+CREATE TABLE [dbo].[CompanyUsers] (
+	[CompanyID] [int] NOT NULL ,
+	[UsersID] [int] NOT NULL ,
+	[Active] [bit] NOT NULL CONSTRAINT [DF_CompanyUsers_Active] DEFAULT (1),
+	[ActiveDate] [datetime] NOT NULL CONSTRAINT [DF_CompanyUsers_ActiveDate] DEFAULT (getdate()),
+	[InactiveDate] [datetime] NULL ,
+	[SecurityLevel] [int] NOT NULL CONSTRAINT [DF_CompanyUsers_SecurityLevel] DEFAULT (1),
+	[Comments] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Flag] [bit] NOT NULL CONSTRAINT [DF_CompanyUsers_Flag] DEFAULT (0),
+	[AssignmentTypeIDList] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_CompanyUsers] PRIMARY KEY  CLUSTERED 
+	(
+		[CompanyID],
+		[UsersID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_CompanyUsers_Company] FOREIGN KEY 
+	(
+		[CompanyID]
+	) REFERENCES [dbo].[Company] (
+		[CompanyID]
+	) ON DELETE CASCADE ,
+	CONSTRAINT [FK_CompanyUsers_SecurityLevel] FOREIGN KEY 
+	(
+		[SecurityLevel]
+	) REFERENCES [dbo].[SecurityLevel] (
+		[SecurityLevel]
+	),
+	CONSTRAINT [FK_CompanyUsers_Users] FOREIGN KEY 
+	(
+		[UsersID]
+	) REFERENCES [dbo].[Users] (
+		[UsersID]
+	)
+) ON [PRIMARY]
+GO
+
+

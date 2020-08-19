@@ -1,0 +1,27 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[Accounting]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[Accounting]
+GO
+
+CREATE TABLE [dbo].[Accounting] (
+	[CompanyID] [int] NOT NULL ,
+	[UsersID] [int] NOT NULL ,
+	[Active] [int] NOT NULL ,
+	[DateLastUpdated] [datetime] NULL ,
+	[UpdateByUserID] [int] NULL ,
+	CONSTRAINT [PK_Accounting] PRIMARY KEY  CLUSTERED 
+	(
+		[CompanyID],
+		[UsersID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_Accounting_CompanyUsers] FOREIGN KEY 
+	(
+		[CompanyID],
+		[UsersID]
+	) REFERENCES [dbo].[CompanyUsers] (
+		[CompanyID],
+		[UsersID]
+	)
+) ON [PRIMARY]
+GO
+
+

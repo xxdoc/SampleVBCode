@@ -1,0 +1,32 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTPhotoReport]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTPhotoReport]
+GO
+
+CREATE TABLE [dbo].[RTPhotoReport] (
+	[RTPhotoReportID] [int] IDENTITY (1, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[Name] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RTPhotoReport_Name] DEFAULT (''),
+	[Description] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RTPhotoReport_Description] DEFAULT (''),
+	[Number] [int] NOT NULL CONSTRAINT [DF_RTPhotoReport_Number] DEFAULT (1),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_RTPhotoReport_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTPhotoReport_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTPhotoReport_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RTPhotoReport_AdminComments] DEFAULT (''),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTPhotoReport] PRIMARY KEY  CLUSTERED 
+	(
+		[RTPhotoReportID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTPhotoReport_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	)
+) ON [PRIMARY]
+GO
+
+

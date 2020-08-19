@@ -1,0 +1,41 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTActivityLogInfoHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTActivityLogInfoHistory]
+GO
+
+CREATE TABLE [dbo].[RTActivityLogInfoHistory] (
+	[RTActivityLogInfoHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[AssignmentsID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[AL01_sPresentDurringInspection] [bit] NULL ,
+	[AL02_sExplainedEstimate] [bit] NULL ,
+	[AL03_sExplainedRCV] [bit] NULL ,
+	[AL03_sExplainedRCVNA] [bit] NULL ,
+	[AL04_sConfirmMortgageeIsCorrect] [bit] NULL ,
+	[AL04_sConfirmMortgageeIsCorrectNA] [bit] NULL ,
+	[AL05_sExplainedMortgageeChecks] [bit] NULL ,
+	[AL05_sExplainedMortgageeChecksNA] [bit] NULL ,
+	[AL06_sConfirmedCoverage] [bit] NULL ,
+	[AL07_sPriorLoss] [bit] NULL ,
+	[AL07_sPriorLossNA] [bit] NULL ,
+	[AL08_sSalvage] [bit] NULL ,
+	[AL09_sSubrogation] [bit] NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_RTActivityLogInfoHistory_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTActivityLogInfoHistory_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTActivityLogInfoHistory_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTActivityLogInfoHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[RTActivityLogInfoHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTActivityLogInfoHistory_RTActivityLogInfo] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[RTActivityLogInfo] (
+		[AssignmentsID]
+	)
+) ON [PRIMARY]
+GO
+
+

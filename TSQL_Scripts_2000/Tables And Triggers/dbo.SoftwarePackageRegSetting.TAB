@@ -1,0 +1,31 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SoftwarePackageRegSetting]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SoftwarePackageRegSetting]
+GO
+
+CREATE TABLE [dbo].[SoftwarePackageRegSetting] (
+	[RegSettingID] [int] NOT NULL ,
+	[SoftWarePackageID] [int] NOT NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_SoftwarePackageRegSetting_Active] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_SoftwarePackageRegSetting] PRIMARY KEY  CLUSTERED 
+	(
+		[RegSettingID],
+		[SoftWarePackageID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_SoftwarePackageRegSetting_RegSetting] FOREIGN KEY 
+	(
+		[RegSettingID]
+	) REFERENCES [dbo].[RegSetting] (
+		[RegSettingID]
+	),
+	CONSTRAINT [FK_SoftwarePackageRegSetting_SoftwarePackage] FOREIGN KEY 
+	(
+		[SoftWarePackageID]
+	) REFERENCES [dbo].[SoftwarePackage] (
+		[SoftWarePackageID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

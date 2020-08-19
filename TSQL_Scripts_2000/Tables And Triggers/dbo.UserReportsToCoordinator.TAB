@@ -1,0 +1,36 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[UserReportsToCoordinator]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[UserReportsToCoordinator]
+GO
+
+CREATE TABLE [dbo].[UserReportsToCoordinator] (
+	[UsersID] [int] NOT NULL ,
+	[CompanyID] [int] NOT NULL ,
+	[ReportsToUsersID] [int] NOT NULL ,
+	[Active] [bit] NOT NULL CONSTRAINT [DF_UserReportsToCoordinator_Active] DEFAULT (1),
+	[DateLastUpdated] [datetime] NULL ,
+	[UpdateByUserID] [int] NULL ,
+	CONSTRAINT [PK_UserReportsToCoordinator] PRIMARY KEY  CLUSTERED 
+	(
+		[UsersID],
+		[CompanyID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_UserReportsToCoordinator_Coordinator] FOREIGN KEY 
+	(
+		[CompanyID],
+		[ReportsToUsersID]
+	) REFERENCES [dbo].[Coordinator] (
+		[CompanyID],
+		[UsersID]
+	) ON DELETE CASCADE ,
+	CONSTRAINT [FK_UserReportsToCoordinator_Manager] FOREIGN KEY 
+	(
+		[CompanyID],
+		[UsersID]
+	) REFERENCES [dbo].[Manager] (
+		[CompanyID],
+		[UsersID]
+	)
+) ON [PRIMARY]
+GO
+
+

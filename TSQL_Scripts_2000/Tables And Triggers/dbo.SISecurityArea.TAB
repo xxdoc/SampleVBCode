@@ -1,0 +1,28 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SISecurityArea]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SISecurityArea]
+GO
+
+CREATE TABLE [dbo].[SISecurityArea] (
+	[SecurityItemsID] [int] NOT NULL ,
+	[SecurityAreaID] [int] NOT NULL ,
+	CONSTRAINT [PK_SISecurityArea] PRIMARY KEY  CLUSTERED 
+	(
+		[SecurityItemsID],
+		[SecurityAreaID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_SISecurityArea_SecurityArea] FOREIGN KEY 
+	(
+		[SecurityAreaID]
+	) REFERENCES [dbo].[SecurityArea] (
+		[SecurityAreaID]
+	),
+	CONSTRAINT [FK_SISecurityArea_SecurityItems] FOREIGN KEY 
+	(
+		[SecurityItemsID]
+	) REFERENCES [dbo].[SecurityItems] (
+		[SecurityItemsID]
+	)
+) ON [PRIMARY]
+GO
+
+

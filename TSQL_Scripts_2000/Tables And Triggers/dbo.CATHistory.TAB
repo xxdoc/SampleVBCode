@@ -1,0 +1,29 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[CATHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[CATHistory]
+GO
+
+CREATE TABLE [dbo].[CATHistory] (
+	[CATHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[CATID] [int] NOT NULL ,
+	[CompanyID] [int] NULL ,
+	[AssignmentTypeID] [int] NULL ,
+	[Name] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Description] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ActiveDate] [datetime] NULL ,
+	[InactiveDate] [datetime] NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_CATHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[CATHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_CATHistory_CAT] FOREIGN KEY 
+	(
+		[CATID]
+	) REFERENCES [dbo].[CAT] (
+		[CATID]
+	)
+) ON [PRIMARY]
+GO
+
+

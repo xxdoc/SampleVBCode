@@ -1,0 +1,37 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[ClientCompanyUsersCat]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[ClientCompanyUsersCat]
+GO
+
+CREATE TABLE [dbo].[ClientCompanyUsersCat] (
+	[ClientCompanyID] [int] NOT NULL ,
+	[CATID] [int] NOT NULL ,
+	[UsersID] [int] NOT NULL ,
+	[Active] [bit] NOT NULL CONSTRAINT [DF_ClientCompanyUsersCat_Active] DEFAULT (1),
+	[DateLastUpdated] [datetime] NULL ,
+	[UpdateByUserID] [int] NULL ,
+	CONSTRAINT [PK_UsrersCat] PRIMARY KEY  CLUSTERED 
+	(
+		[ClientCompanyID],
+		[CATID],
+		[UsersID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_CompanyUsersCat_CompanyUsers] FOREIGN KEY 
+	(
+		[ClientCompanyID],
+		[UsersID]
+	) REFERENCES [dbo].[CompanyUsers] (
+		[CompanyID],
+		[UsersID]
+	),
+	CONSTRAINT [FK_UsrersCat_CompanyCat] FOREIGN KEY 
+	(
+		[ClientCompanyID],
+		[CATID]
+	) REFERENCES [dbo].[ClientCompanyCat] (
+		[ClientCompanyID],
+		[CATID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

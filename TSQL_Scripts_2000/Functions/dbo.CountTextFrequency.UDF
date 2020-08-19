@@ -1,0 +1,74 @@
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[CountTextFrequency]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[CountTextFrequency]
+GO
+
+/******************************************************************
+*
+*    	Description:	Counts the Instances of a String within a String
+*			As well You can pass Patterns or wild cards to be searched and counted.
+*	
+*	Author: 	Brad Skidmore
+*	Date: 		4/6/2004
+*
+******************************************************************/
+
+CREATE FUNCTION dbo.CountTextFrequency
+(
+	@TextString 	text,
+	@SubString 	varchar(8000)
+)
+RETURNS INT
+AS
+BEGIN
+	DECLARE @Count 		int --Count the instances of @SubString
+	DECLARE @Pos 		int --Pos inside Current Chunk of @TextString
+	DECLARE @txtLen		int --Len of the Chunk
+	DECLARE @txtPos		int --start pos of the current chunk
+	DECLARE @MyTextString 	varchar(8000) --text data of current chunk
+
+	SET @txtLen = 8000	--Set the Max Len a varchar can hold (Chunk the BLOB text)
+	SET @txtPos = 1		--Start at 1 pos of the Blob text
+	Set @Count =0		--Set the Count of Substring
+	
+	--Get the first Chunck
+	SET @MyTextString = SUBSTRING(@TextString, @txtPos, @txtLen) 
+	
+	--While the latest chunk has some data Count the instances of @SubString
+	WHILE DATALENGTH(@MyTextString) > 0
+	BEGIN
+		Set @Pos = PATINDEX('%' + @SubString + '%', @MyTextString)
+		WHILE @Pos > 0 
+		BEGIN
+			SET @Count = @Count + 1
+			IF DATALENGTH(@SubString) > 1
+			BEGIN
+				SET @MyTextString = STUFF(@MyTextString, 1, @Pos + DATALENGTH(@SubString)-1 ,'')
+			END
+			ELSE
+			BEGIN
+				SET @MyTextString = STUFF(@MyTextString, 1, @Pos ,'')
+			END
+			SET @Pos = PATINDEX('%' + @SubString + '%', @MyTextString) 
+		END
+		--Get Subsequent Chuncks
+		SET @txtPos = @txtPos + @txtLen
+		SET @MyTextString = SUBSTRING(@TextString, @txtPos, @txtLen) 
+	END
+	--Return the count of @SubString found in all the chunks
+	RETURN(@Count)
+END
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+GRANT  REFERENCES  ON [dbo].[CountTextFrequency]  TO [CFUSER]
+GO
+

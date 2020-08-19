@@ -1,0 +1,35 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[PolicyLimitsHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[PolicyLimitsHistory]
+GO
+
+CREATE TABLE [dbo].[PolicyLimitsHistory] (
+	[PolicyLimitsHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[PolicyLimitsID] [int] NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[ClassTypeID] [int] NOT NULL ,
+	[LimitAmount] [money] NOT NULL CONSTRAINT [DF_PolicyLimitsHistory_LimitAmount] DEFAULT (0),
+	[RCSaidProp] [money] NOT NULL CONSTRAINT [DF_PolicyLimitsHistory_RCSaidProp] DEFAULT (0),
+	[Reserves] [money] NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_PolicyLimitsHistory_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_PolicyLimitsHistory_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_PolicyLimitsHistory_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_PolicyLimitsHistory_AdminComments] DEFAULT (''),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	[FarmersUnitRowID] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_PolicyLimitsHistory_FarmersUnitRowID] DEFAULT (''),
+	CONSTRAINT [PK_PolicyLimitsHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[PolicyLimitsHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_PolicyLimitsHistory_PolicyLimits] FOREIGN KEY 
+	(
+		[PolicyLimitsID]
+	) REFERENCES [dbo].[PolicyLimits] (
+		[PolicyLimitsID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

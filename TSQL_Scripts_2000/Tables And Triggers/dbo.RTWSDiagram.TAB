@@ -1,0 +1,36 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[RTWSDiagram]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[RTWSDiagram]
+GO
+
+CREATE TABLE [dbo].[RTWSDiagram] (
+	[RTWSDiagramID] [int] IDENTITY (1, 1) NOT NULL ,
+	[AssignmentsID] [int] NOT NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[Name] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RTWSDiagram_Name] DEFAULT (''),
+	[Description] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RTWSDiagram_Description] DEFAULT (''),
+	[Number] [int] NOT NULL CONSTRAINT [DF_RTWSDiagram_Number] DEFAULT (1),
+	[DiagramPhotoName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RTWSDiagram_DiagramPhotoName] DEFAULT (''),
+	[DownloadDiagramPhoto] [bit] NOT NULL CONSTRAINT [DF_RTWSDiagram_DownloadDiagramPhoto] DEFAULT (0),
+	[UploadDiagramPhoto] [bit] NOT NULL CONSTRAINT [DF_RTWSDiagram_UploadDiagramPhoto] DEFAULT (0),
+	[DiagramXML] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL CONSTRAINT [DF_RTWSDiagram_DiagramXML] DEFAULT (''),
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_RTWSDiagram_IsDeleted] DEFAULT (0),
+	[DownLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTWSDiagram_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NOT NULL CONSTRAINT [DF_RTWSDiagram_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_RTWSDiagram_AdminComments] DEFAULT (''),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_RTWSDiagram] PRIMARY KEY  CLUSTERED 
+	(
+		[RTWSDiagramID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_RTWSDiagram_Assignments] FOREIGN KEY 
+	(
+		[AssignmentsID]
+	) REFERENCES [dbo].[Assignments] (
+		[AssignmentsID]
+	)
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

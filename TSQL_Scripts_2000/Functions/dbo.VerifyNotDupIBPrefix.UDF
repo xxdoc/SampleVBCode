@@ -1,0 +1,134 @@
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[VerifyNotDupIBPrefix]') and xtype in (N'FN', N'IF', N'TF'))
+drop function [dbo].[VerifyNotDupIBPrefix]
+GO
+
+CREATE FUNCTION [dbo].[VerifyNotDupIBPrefix] (@psIBPrefix varchar(5), @piUsersID int)
+RETURNS varchar(5)
+AS  
+BEGIN 
+	
+	--Need to check the IB prefix to make sure that it is not in
+	--the AdjusterUsersSoftware for any other USERSID.  If it Is then Need to start checking for
+	--the Next avail IB prefix.  Starting with AA ending with ZZZ ALL UCASE !!!
+	
+	DECLARE @sIBPrefix as varchar(5)
+	DECLARE @iUsersID As int
+	DECLARE @iUsersIDCount as int 
+	DECLARE @iCount As int
+	DECLARE @i01Char As int
+	DECLARE @i02Char As int
+	DECLARE @i03Char As int
+	DECLARE @sSQL As varchar(8000)
+	DECLARE @bFOUND_NEWIBPREFIX as bit
+	
+	IF @psIBPrefix Is Null 
+	BEGIN
+		SET @sIBPrefix = 'AA'
+	END
+	ELSE
+	BEGIN
+		SET @sIBPrefix = UPPER(@psIBPrefix)
+	END
+	
+   	SET @iUsersID = @piUsersID
+	SET @bFOUND_NEWIBPREFIX = 0
+    
+    	SET @iUsersIDCount = dbo.CheckDupIBPREFIX(@sIBPrefix, @iUsersID)
+    
+	--if the Count is more than 0, then need to get the next available IB prefix
+	--Starting with AA to AZ and then AAA to ZZZ, and keep checking until its not a duplicate.
+	--(that is 676 + 17576 different possibilities)
+
+    	IF @iUsersIDCount > 0 
+	BEGIN
+		--Start off all chars at "AAA"  but don't start using char 03
+		--until gone through all the AA to ZZ possibilities.(That is 676)
+		--ASCII 65 --> 90  = A --> Z
+		--Reset each one 1 below ASCII for "A" which would be 64
+		SET @i01Char = 65
+		SET @i02Char = 64
+		SET @i03Char = 65
+		SET @iCount = 0
+		WHILE @iCount < 18252 --(676 + 17576)
+		BEGIN
+	        	IF @iCount > 676 
+	            	BEGIN --Already tried AA to ZZ So need to Start with AAA Using Char 03 as well
+		                IF @iCount = 677 
+				BEGIN
+					--Need to reset for 3 char Prefix
+					SET @i01Char = 65
+					SET @i02Char = 65
+					SET @i03Char = 64
+				END
+		                    
+		                If @i03Char = 90 
+				BEGIN
+					--if char 03 is past z then move then
+					IF @i02Char = 90 
+					BEGIN
+						--if char 02 is past Z then move to the next char 01
+						--and reset char 02
+						SET @i01Char = @i01Char + 1
+						SET @i02Char = 65
+					END
+					ELSE
+					BEGIN
+						SET @i02Char = @i02Char + 1
+					END
+					SET @i03Char = 65
+				END
+		               	ELSE
+				BEGIN
+					SET @i03Char = @i03Char + 1
+				END
+	                	SET @sIBPrefix = Char(@i01Char) + Char(@i02Char) + Char(@i03Char)
+			END
+	           	ELSE
+			BEGIN
+		                IF @i02Char = 90
+				BEGIN
+					--if char 02 is past Z then move to the next char 01
+					--and reset char 02
+					SET @i01Char = @i01Char + 1
+					SET @i02Char = 65
+				END
+		                ELSE
+				BEGIN
+					SET @i02Char = @i02Char + 1
+				END
+		                SET @sIBPrefix = Char(@i01Char) + Char(@i02Char)
+	            	END
+	            	SET @iUsersIDCount = dbo.CheckDupIBPREFIX(@sIBPrefix, @iUsersID)
+			If @iUsersIDCount = 0 
+			BEGIN
+				--GoTo FOUND_NEWIBPREFIX
+				SET @bFOUND_NEWIBPREFIX = 1
+				BREAK
+			END
+	        END
+	        --If we get to here that means not one prefix is available out of
+	        --676 + 17576 possibilities.  That means an army of adjusters work for us.
+	        --use the same prefix entered
+		IF @bFOUND_NEWIBPREFIX <> 1
+		BEGIN
+			SET @sIBPrefix = UPPER(@psIBPrefix)
+		END
+    	END
+	--FOUND_NEWIBPREFIX:
+	return(@sIBPrefix)
+END
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+GRANT  EXECUTE  ON [dbo].[VerifyNotDupIBPrefix]  TO [CFUSER]
+GO
+

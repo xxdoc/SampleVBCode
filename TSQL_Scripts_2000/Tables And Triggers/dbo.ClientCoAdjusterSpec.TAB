@@ -1,0 +1,46 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[ClientCoAdjusterSpec]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[ClientCoAdjusterSpec]
+GO
+
+CREATE TABLE [dbo].[ClientCoAdjusterSpec] (
+	[ClientCoAdjusterSpecID] [int] IDENTITY (1, 1) NOT NULL ,
+	[ClientCompanyID] [int] NOT NULL ,
+	[UsersID] [int] NOT NULL ,
+	[ACID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ACIDDescription] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Comments] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[ClientCompanyCatSpecID] [int] NULL ,
+	[ZipCode] [int] NULL ,
+	[ZipCodeCount] [int] NULL ,
+	[ActiveDate] [datetime] NOT NULL CONSTRAINT [DF_AdjusterSpec_ActiveDate] DEFAULT (getdate()),
+	[InactiveDate] [datetime] NULL ,
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_UserCompanySpec] PRIMARY KEY  CLUSTERED 
+	(
+		[ClientCoAdjusterSpecID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [IX_AdjusterSpec] UNIQUE  NONCLUSTERED 
+	(
+		[ClientCompanyID],
+		[ACID],
+		[ActiveDate]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_ClientCoAdjusterSpec_ClientCompanyCatSpec] FOREIGN KEY 
+	(
+		[ClientCompanyCatSpecID]
+	) REFERENCES [dbo].[ClientCompanyCatSpec] (
+		[ClientCompanyCatSpecID]
+	),
+	CONSTRAINT [FK_UserCompanySpec_CompanyAdjusterUsers] FOREIGN KEY 
+	(
+		[ClientCompanyID],
+		[UsersID]
+	) REFERENCES [dbo].[Adjuster] (
+		[CompanyID],
+		[UsersID]
+	)
+) ON [PRIMARY]
+GO
+
+

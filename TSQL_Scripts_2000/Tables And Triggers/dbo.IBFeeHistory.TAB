@@ -1,0 +1,35 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[IBFeeHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[IBFeeHistory]
+GO
+
+CREATE TABLE [dbo].[IBFeeHistory] (
+	[IBFeeHistoryID] [int] IDENTITY (20000, 1) NOT NULL ,
+	[IBFeeID] [int] NOT NULL ,
+	[AssignmentsID] [int] NULL ,
+	[IBID] [int] NULL ,
+	[ID] [int] NULL ,
+	[IDAssignments] [int] NULL ,
+	[IDIB] [int] NULL ,
+	[FeeScheduleFeeTypesID] [int] NULL ,
+	[NumberOfItems] [int] NULL ,
+	[Amount] [money] NULL ,
+	[Comment] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DownLoadMe] [bit] NULL CONSTRAINT [DF_IBFeeHistory_DownLoadMe] DEFAULT (0),
+	[UpLoadMe] [bit] NULL CONSTRAINT [DF_IBFeeHistory_UpLoadMe] DEFAULT (0),
+	[AdminComments] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[DateLastUpdated] [datetime] NULL ,
+	[UpdateByUserID] [int] NULL ,
+	CONSTRAINT [PK_IBFeeHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[IBFeeHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_IBFeeHistory_IBFee] FOREIGN KEY 
+	(
+		[IBFeeID]
+	) REFERENCES [dbo].[IBFee] (
+		[IBFeeID]
+	) ON DELETE CASCADE 
+) ON [PRIMARY]
+GO
+
+

@@ -1,0 +1,30 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[SoftwarePackageHistory]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[SoftwarePackageHistory]
+GO
+
+CREATE TABLE [dbo].[SoftwarePackageHistory] (
+	[SoftWarePackageHistoryID] [int] IDENTITY (1, 1) NOT NULL ,
+	[SoftWarePackageID] [int] NOT NULL ,
+	[ClientCompanyID] [int] NOT NULL ,
+	[CATID] [int] NOT NULL ,
+	[PackageName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[Description] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[SPVersion] [int] NOT NULL CONSTRAINT [DF_SoftwarePackageHistory_SPVersion] DEFAULT (1),
+	[VersionDate] [datetime] NOT NULL ,
+	[IsDeleted] [bit] NOT NULL CONSTRAINT [DF_SoftwarePackageHistory_IsDeleted] DEFAULT (0),
+	[DateLastUpdated] [datetime] NOT NULL ,
+	[UpdateByUserID] [int] NOT NULL ,
+	CONSTRAINT [PK_SoftwarePackageHistory] PRIMARY KEY  CLUSTERED 
+	(
+		[SoftWarePackageHistoryID]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY] ,
+	CONSTRAINT [FK_SoftwarePackageHistory_SoftwarePackage] FOREIGN KEY 
+	(
+		[SoftWarePackageID]
+	) REFERENCES [dbo].[SoftwarePackage] (
+		[SoftWarePackageID]
+	)
+) ON [PRIMARY]
+GO
+
+
